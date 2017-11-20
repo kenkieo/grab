@@ -10,7 +10,7 @@ class MyParser(HTMLParser.HTMLParser):
             for name, value in attrs:
                 if name == 'class':
                     if value == 'u':
-
+                        value = value
 
     def handle_data(self, data):
         if (data.isspace() == False):

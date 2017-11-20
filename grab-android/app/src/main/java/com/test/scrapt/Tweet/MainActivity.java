@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
                 a.login();
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
-                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
+//                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
 
                 s = a.GrabTweetInfo(uid);
-                s += proxy + "\n";
+//                s += proxy + "\n";
                 s += a.GrabTweetInfo("3373931552");
                 s += a.GrabTweetInfo("1789247505");
             } else {
@@ -148,13 +148,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String spec = "https://weibo.cn/u/" + uid + "?page=1";
-//                OpenWebView.open(MainActivity.this, spec);
-                WifiControl mwc = new WifiControl();
-                try {
-                    mwc.setHttpPorxySetting(MainActivity.this, "192.168.1.176", 8888);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                OpenWebView.open(MainActivity.this, spec);
+//                WifiControl mwc = new WifiControl();
+//                try {
+//                    mwc.setHttpPorxySetting(MainActivity.this, "192.168.1.176", 8888);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 

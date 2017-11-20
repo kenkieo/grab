@@ -48,14 +48,15 @@ public class CookiesStore {
             for (String name : cookieNames) {
                 String encodedCookie = cookiePrefs.getString(COOKIE_NAME_PREFIX + name, null);
                 if (encodedCookie != null) {
-//                    Cookie decodedCookie = decodeCookie(encodedCookie);
-//                    if (decodedCookie != null) {
-                    ;
                     cookie = parseCookie(encodedCookie);
-                    if (cookie.expiresAt() >= (new Date()).getTime()) {
+                    Log.e("ZTAG", "parseCookie: expiresAt " + (cookie.persistent() ? cookie.expiresAt() : "null"));
+                    if (cookie.persistent()) {
+                        if (cookie.expiresAt() >= (new Date()).getTime()) {
+                            cookies.put(name, cookie);
+                        }
+                    } else {
                         cookies.put(name, cookie);
                     }
-//                    }
                 }
             }
 
@@ -99,21 +100,18 @@ public class CookiesStore {
             }
         }
         Cookie cookie = null;
-        if (httponly) {
-            cookie = new Cookie.Builder()
-                    .name(name)
-                    .value(value)
-                    .expiresAt(date.getTime())
-                    .domain(domain)
-                    .httpOnly()
-                    .build();
+        if (date == null) {
+            if (httponly) {
+                cookie = new Cookie.Builder().name(name).value(value).domain(domain).httpOnly().build();
+            } else {
+                cookie = new Cookie.Builder().name(name).value(value).domain(domain).build();
+            }
         } else {
-            cookie = new Cookie.Builder()
-                    .name(name)
-                    .value(value)
-                    .domain(domain)
-                    .expiresAt(date==null?0:date.getTime())
-                    .build();
+            if (httponly) {
+                cookie = new Cookie.Builder().name(name).value(value).expiresAt(date.getTime()).domain(domain).httpOnly().build();
+            } else {
+                cookie = new Cookie.Builder().name(name).value(value).domain(domain).expiresAt(date == null ? 0 : date.getTime()).build();
+            }
         }
         return cookie;
     }
@@ -125,10 +123,14 @@ public class CookiesStore {
         Log.e("ZTAG", "name: " + name);
         Log.e("ZTAG", "expiresAt: " + cookie.expiresAt() + " " + (new Date()).getTime());
         // Save cookie into local store, or remove if expired
-        if (cookie.expiresAt() >= (new Date()).getTime()) {
-            cookies.put(name, cookie);
+        if (cookie.persistent()) {
+            if (cookie.expiresAt() >= (new Date()).getTime()) {
+                cookies.put(name, cookie);
+            } else {
+                cookies.remove(name);
+            }
         } else {
-            cookies.remove(name);
+            cookies.put(name, cookie);
         }
 
         // Save cookie into persistent store

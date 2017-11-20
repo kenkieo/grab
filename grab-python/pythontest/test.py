@@ -101,10 +101,7 @@ class Weibo:
             'Content-Length': '154',
             'Content-Type': 'application/x-www-form-urlencoded',
             'Host': 'passport.weibo.cn',
-            # 'Origin': 'https://passport.weibo.cn',
-            # 'Cookie': '_T_WM=7fd619ec6d8d51b042dbc6759e2cade7; SCF=AqQK_FqFQGeoZ_Iay3xs7meiCDBBHoDwm_wPqLwOLaA5qMQvcFKqtFNYI_dv5AygCJ8YluTK7k7Xwpu14aaCPD8.; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWP.7RURqVHHo6YOHH5dDkQ5JpX5K-hUgL.Fo2N1h.EShMfeh-2dJLoI7LeIg4r9PS0MNet; SUB=_2A2509cfeDeThGedJ41sT9CnJyzmIHXVUGemWrDV6PUJbkdANLULEkW0tu1bctF0X21n7aVwCdW-3vxqw8w..; SUHB=0WGNCw-giRxknW'
-            # 'Cookie':'_T_WM=7fd619ec6d8d51b042dbc6759e2cade7; SCF=AqQK_FqFQGeoZ_Iay3xs7meiCDBBHoDwm_wPqLwOLaA5qMQvcFKqtFNYI_dv5AygCJ8YluTK7k7Xwpu14aaCPD8.; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WWP.7RURqVHHo6YOHH5dDkQ5JpX5K-hUgL.Fo2N1h.EShMfeh-2dJLoI7LeIg4r9PS0MNet; SUB=_2A2509cfeDeThGedJ41sT9CnJyzmIHXVUGemWrDV6PUJbkdANLULEkW0tu1bctF0X21n7aVwCdW-3vxqw8w..; SUHB=0WGNCw-giRxknW'
-        }
+     }
         r = requests.post("https://passport.weibo.cn/sso/login", data=payload, headers=headers)
         # print(r.history)
         # print(r.url)
@@ -146,7 +143,7 @@ class Weibo:
             return 0
 
     def getAtUserHtml(self, uid):
-        'https://weibo.cn/at/weibo?uid=1772392290&page=1'
+        'https://weibo.cn/at/weibo?uid=xxxxxxxxx&page=1'
         dir = self.allDir + '/' + uid + '/' + timeDir + '/at'
         self.atUserDir = dir
         checkDir(dir)

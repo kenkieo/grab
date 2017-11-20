@@ -262,9 +262,9 @@ public class GrabTweet {
         String userName = "75023143@qq.com";
         String userPass = "331730216";
 
-
+        Log.e("ZTAG", "have cookies: " + mCookiesStore.getCookieNum());
         if (mCookiesStore.getCookieNum() == 4) {
-            Log.e("ZTAG", "have cookies"+mCookiesStore.getCookieNum());
+
             return "has cookies";
         }
         try {
