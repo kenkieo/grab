@@ -38,7 +38,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         //设置系统的默认异常处理器
         Thread.setDefaultUncaughtExceptionHandler(this);
         mContext = context;
-        PATH = Environment.getExternalStorageDirectory().getPath() + "/" + mContext.getPackageName() + "/CrashInfo/";
+        PATH = Environment.getExternalStorageDirectory().getPath() + "/xxx/" + mContext.getPackageName() + "/CrashInfo/";
     }
 
     @Override
