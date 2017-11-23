@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
  * Created by Administrator on 2017/11/10.
  */
 
-public class ParseTweetItems {
+public class ParseTweetItems extends ParseItem{
     public static String parse(TweetItem items, Document document) {
         Elements e = document.select("div.tip2");
         String s = e.toString();
@@ -23,18 +23,6 @@ public class ParseTweetItems {
         return s;
     }
 
-    public static String splitsqrt(String d) {
-        int len = d.length();
-        int start = d.indexOf("[");
-        int end = d.indexOf("]");
-        if (start < end) {
-            if (start > 0) {
-                if (len > 0)
-                    return d.substring(start + 1, end);
-            }
-        }
 
-        return null;
-    }
 
 }

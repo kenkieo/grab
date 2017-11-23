@@ -5,8 +5,10 @@ from lxml import etree
 import re
 import sys
 import os
-import yougu
+import json
 import datetime
+import urllib
+
 
 now = datetime.datetime.now()
 
@@ -101,7 +103,7 @@ class Weibo:
             'Content-Length': '154',
             'Content-Type': 'application/x-www-form-urlencoded',
             'Host': 'passport.weibo.cn',
-     }
+        }
         r = requests.post("https://passport.weibo.cn/sso/login", data=payload, headers=headers)
         # print(r.history)
         # print(r.url)
@@ -226,25 +228,168 @@ class Weibo:
                 print url + '   error !!!'
                 return
 
-    def getf(self, uid):
-        url = 'http://weibo.com/p/100505' + uid + '/' + timeDir + '/info?mod=pedit_more'
+    def test(self):
+        # url = 'https://weibo.com/p/1005051772392290/info?mod=pedit_more'
+        url = 'https://weibo.com/p/1005051772392290/info?mod=pedit_more'
+        # url = urllib.quote(url)
+
+        header1 = {
+            'Accept': 'text/html, application/xhtml+xml, */*',
+            'Accept-Language': 'zh-CN',
+            'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
+            'Accept-Encoding': 'gzip, deflate',
+            'Host': 'weibo.com',
+            'Connection': 'Keep-Alive',
+        }
+        r = requests.get(url, headers=header1)
+        print r
+
+    def test7e(self):
+        url = 'https://passport.weibo.com/visitor/genvisitor'
+
+        header1 = {
+            'Accept': '*/*',
+            'Accept-Language': 'zh-CN',
+            'Referer': 'https://passport.weibo.com/visitor/visitor?entry=miniblog&'
+                       'a=enter&'
+                       'url=https%3A%2F%2Fweibo.com%2Fp%2F1005051772392290%2Finfo%3Fmod%3Dpedit_more&'
+                       'domain=.weibo.com&'
+                       'ua=php-sso_sdk_client-0.6.23&'
+                       '_rand=1511417677.5506',
+            'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
+            'Accept-Encoding': 'gzip, deflate',
+            'Host': 'passport.weibo.com',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Connection': 'Keep-Alive',
+            'If-Modified-Since': '0',
+            'Cache-Control': 'no-cache',
+            'Content-Length': '5657',
+        }
+        cookies = {
+            'TC-Page-G0': '9183dd4bc08eff0c7e422b0d2f4eeaec'
+        }
+        r = requests.get(url, headers=header1, cookies=cookies)
+        print r.content
+
+    def test8(self):
+        url = 'https://passport.weibo.com/visitor/visitor?a=incarnate&' \
+              't=G3gNXtaosiTZKLmzmi8KLdYwKSVzRVEYGfXdE9YXqlQ%3D&' \
+              'w=2&' \
+              'c=095&' \
+              'gc=&' \
+              'cb=cross_domain&' \
+              'from=weibo&' \
+              '_rand=0.9728172218271613'
+
+        header1 = {
+            'Accept': 'application/javascript, */*;q=0.8',
+            'Accept-Language': 'zh-CN',
+            'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
+            'Accept-Encoding': 'gzip, deflate',
+            'Host': 'passport.weibo.com',
+            # 'Upgrade-Insecure-Requests': '1',
+            'Connection': 'Keep-Alive'
+        }
+        cookies = {
+            'tid': 'G3gNXtaosiTZKLmzmi8KLdYwKSVzRVEYGfXdE9YXqlQ=__095',
+            'TC-Page-G0': '9183dd4bc08eff0c7e422b0d2f4eeaec'
+        }
+        r = requests.get(url, headers=header1, cookies=cookies)
+        subp = r.cookies.get_dict(domain='.weibo.com', path='/')['SUBP']
+        sub = r.cookies.get_dict(domain='.weibo.com', path='/')['SUB']
+        print subp
+        print sub
+
+    def test9(self):
+        sub='_2AkMtSuurf8NxqwJRmPEWzGLnbY1wwwzEieKbFhpwJRMxHRl-yT9jqlEYtRB6XNyh2BGCWNY08ICCAHshfTwl1d1fsWoa&'
+        subp = '0033WrSXqPxfM72-Ws9jqgMF55529P9D9W5U7lA6__aRkAmiaClWdh7R'
+        url = 'https://login.sina.com.cn/visitor/visitor?a=crossdomain&' \
+              'cb=return_back&' \
+              's=' + sub + '&' \
+                           'sp=' + subp + '&' \
+                                          'from=weibo&' \
+                                          '_rand=0.9969922026682345'
+        header1 = {
+            'Accept': 'application/javascript, */*;q=0.8',
+            'Accept-Language': 'zh-CN',
+            'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
+            'Accept-Encoding': 'gzip, deflate',
+            'Host': 'login.sina.com.cn',
+            # 'Upgrade-Insecure-Requests': '1',
+            'Connection': 'Keep-Alive'
+        }
+        saveFile = 'html/more.html'
+        r = requests.get(url, headers=header1)
+        subp = r.cookies.get_dict(domain='.sina.com.cn', path='/')['SUBP']
+        sub = r.cookies.get_dict(domain='.sina.com.cn', path='/')['SUB']
+        # ret = self.saveUrl(url, saveFile)
+        # if ret == -1:
+        #     return
+
+        # def getUserInfo(self, uid):
+        url = 'http://weibo.com/p/100505' + uid + '/info?mod=pedit_more'
         saveFile = 'html/more.html'
         checkDir('html')
         header1 = {
             'Accept': 'text/html, application/xhtml+xml, */*',
             'Accept-Language': 'zh-CN',
-            'User-Agent': 'Mozilla/5.0(compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
-            'Accept-Encoding': 'gzip,deflate',
-            'Host': 'weibo.com',
-            'Connection': 'Keep-Alive'
+            'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
+            'Accept-Encoding': 'gzip, deflate',
+            # 'Host':'weibo.com',
+            # 'Upgrade-Insecure-Requests': '1',
+            # 'Connection': 'Keep-Alive'
         }
-        r = requests.get(url)  # , headers=header1)#, cookies=self.cookies)
-        self.saveUrl(url, saveFile)
+        self.cookies = {'TC-Page-G0': 'cdcf495cbaea129529aa606e7629fea7',
+                        'SUB': sub,
+                        'SUBP': subp}
+        # 'SUB': '_2AkMtSdP5f8NxqwJRmPEWzGLnbY1wwwzEieKbFSIiJRMxHRl-yT9kqkNdtRB6XNyh2FdIWjmqWTf58pvCfy6A-XMdRAwJ',
+        # 'SUBP': '0033WrSXqPxfM72-Ws9jqgMF55529P9D9W5U7lA6__aRkAmiaClWdh7R'}
+        r = requests.get(url, headers=header1, cookies=self.cookies)
+        # self.cookies = {'TC-Page-G0':'cdcf495cbaea129529aa606e7629fea7','SUB':'_2AkMtSdP5f8NxqwJRmPEWzGLnbY1wwwzEieKbFSIiJRMxHRl-yT9kqkNdtRB6XNyh2FdIWjmqWTf58pvCfy6A-XMdRAwJ', 'SUBP':'0033WrSXqPxfM72-Ws9jqgMF55529P9D9W5U7lA6__aRkAmiaClWdh7R'}
+        # r = requests.get(url, headers=header1)
+        ret = self.saveUrl(url, saveFile)
+        if ret == -1:
+            return
         # print r.headers
-        print ''
-        for v, k in r.headers.items():
-            print('{v}:{k}'.format(v=v, k=k))
-        print r
+        # print ''
+        # for v, k in r.headers.items():
+        #     print('{v}:{k}'.format(v=v, k=k))
+        # print r
+
+        a = open(saveFile).read()
+        selector = etree.HTML(a)
+        tweete = "^".join(selector.xpath('//script/text()'))
+        # print tweete
+        t = tweete.split("^")
+        # t = tweete
+        for tw in t:
+            if (tw.find("FM.view(") != -1):
+                tw = tw[tw.find("{"):tw.find("}") + 1]
+                # print (tw)
+                # jw = json.loads((tw))
+                # print jw
+                if (tw.find('"domid":"Pl_Official_RightGrowNew__57"') != -1):
+                    # print '----'
+                    # print tw
+                    jw = json.loads((tw))
+                    selector = etree.HTML(jw['html'])
+                    # s = selector.xpath('//a[@class="W_icon_level"]/text()')
+                    s = selector.xpath(
+                        '//div[@class="level_box S_txt2"]/p[@class="level_info"]/span[@class="info"]/span[@class="S_txt1"]/text()')
+                    print s[1]
+
+                if (tw.find('"domid":"Pl_Core_T8CustomTriColumn__55"') != -1):
+                    # print '++++'
+                    # print tw
+                    jw = json.loads((tw))
+                    selector = etree.HTML(jw['html'])
+                    # print jw['html']
+                    s = selector.xpath('//strong[@class="W_f18"]/text()')
+                    # print s
+                    v = selector.xpath('//span[@class="S_txt2"]/text()')
+                    # print v
+
+                    print v[0], ":", s[0], v[1], ":", s[1], v[2], ":", s[2]
 
     def parseHeadHtml(self, opf, filename):
         a = open(filename).read()
@@ -399,14 +544,17 @@ if __name__ == "__main__":
     # uid = '3373931552'
 
     a = Weibo()
-    a.login()
-    a.getf(uid)
+    # a.login()
+    a.test()
+    # a.getUserInfo(uid)
     #
-    a.getTweetHtml(uid)
-    a.getFollowHtml(uid)
-    a.getAtUserHtml(uid)
-    a.parseTweet(uid)
-    a.parseFollow(uid)
-    a.parseAtUser(uid)
+    # return
+    # a.getTweetHtml(uid)
+    # a.getFollowHtml(uid)
+    # a.getAtUserHtml(uid)
+    # a.parseTweet(uid)
+    # a.parseFollow(uid)
+    # a.parseAtUser(uid)
+
     # yougu.getyougu()
     print 'end'

@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.Proxy;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
@@ -51,15 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
             if (isconnect == true) {
                 GrabTweet a = new GrabTweet(MainActivity.this);
-
                 a.login();
+
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
 //                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
-
-                s = a.GrabTweetInfo(uid);
+//                s = a.GrabTweetInfo(uid);
 //                s += proxy + "\n";
-                s += a.GrabTweetInfo("3373931552");
-                s += a.GrabTweetInfo("1789247505");
+//                s += a.GrabTweetInfo("3373931552");
+//                s += a.GrabTweetInfo("1789247505");
+                s = a.test();
+
             } else {
                 s = "NetWork is disconnect!!!";
             }
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
 
     }

@@ -257,6 +257,26 @@ public class GrabTweet {
         }
     }
 
+    public String test() {
+        String s;
+
+        String spec = "https://weibo.com/p/1005051772392290/info?mod=pedit_more";
+        try {
+            URL url = new URL(spec);
+            s = getHtml(url);
+            Document d = Jsoup.parse(s);
+            s = ParseUserInfo.parse(d);
+            Log.e("ZTAG", "test test test" + s);
+        } catch (Exception e) {
+            e.printStackTrace();
+            s = e.getMessage();
+
+        }
+
+        s += "\n";
+        return s;
+    }
+
     public String login() {
         String s;
         String userName = "75023143@qq.com";
@@ -264,7 +284,6 @@ public class GrabTweet {
 
         Log.e("ZTAG", "have cookies: " + mCookiesStore.getCookieNum());
         if (mCookiesStore.getCookieNum() == 4) {
-
             return "has cookies";
         }
         try {
