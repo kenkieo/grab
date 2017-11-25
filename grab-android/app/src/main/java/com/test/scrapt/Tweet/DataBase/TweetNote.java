@@ -21,22 +21,29 @@ public class TweetNote {
     private String uid;
     private String tweet;
     private String follow;
+    private String integral;
     private String fan;
     private String date;
-
-    @Generated(hash = 1716036580)
+    @Generated(hash = 1027362690)
     public TweetNote(Long id, @NotNull String uid, String tweet, String follow,
-            String fan, String date) {
+            String integral, String fan, String date) {
         this.id = id;
         this.uid = uid;
         this.tweet = tweet;
         this.follow = follow;
+        this.integral = integral;
         this.fan = fan;
         this.date = date;
     }
-
     @Generated(hash = 1042784436)
     public TweetNote() {
+    }
+    public String getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(String integral) {
+        this.integral = integral;
     }
 
     public String getDate() {
@@ -51,13 +58,14 @@ public class TweetNote {
     public String toString() {
         return uid + ":" + follow + ":" + follow + ":" + fan + ":" + date;
     }
+
     @Keep
-    public boolean isEqual(TweetNote tn1){
-        if(tn1==null)return false;
-        if (tn1.getUid().equals(getUid())){
-            if (tn1.getTweet().equals(getTweet())){
-                if (tn1.getFollow().equals(getFollow())){
-                    if (tn1.getFan().equals(getFan())){
+    public boolean isEqual(TweetNote tn1) {
+        if (tn1 == null) return false;
+        if (tn1.getUid().equals(getUid())) {
+            if (tn1.getTweet().equals(getTweet())) {
+                if (tn1.getFollow().equals(getFollow())) {
+                    if (tn1.getFan().equals(getFan())) {
                         return true;
                     }
                 }

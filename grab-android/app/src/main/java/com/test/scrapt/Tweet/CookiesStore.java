@@ -59,7 +59,6 @@ public class CookiesStore {
                     }
                 }
             }
-
             // Clear out expired cookies
             clearExpired();
         }
@@ -132,7 +131,6 @@ public class CookiesStore {
         } else {
             cookies.put(name, cookie);
         }
-
         // Save cookie into persistent store
         SharedPreferences.Editor prefsWriter = cookiePrefs.edit();
         prefsWriter.putString(COOKIE_NAME_STORE, TextUtils.join(",", cookies.keySet()));

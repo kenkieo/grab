@@ -14,6 +14,7 @@ import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,27 +39,31 @@ public class MainActivity extends AppCompatActivity {
 
     String spec;
     TextView tv = null;
-    TextView uidtv = null;
-    Button button = null;
+    EditText uidedt = null;
+    EditText pwdedt = null;
+    Button login_btn = null;
+    Button uc_btn = null;
     Button stock_btn = null;
+
+
     String uid;
+    String pwd;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            String s;
-            boolean isconnect = WifiControl.isConnect(MainActivity.this);
-
-            if (isconnect == true) {
+            String s = "";
+            EventBus.getDefault().post(new MessageEvent(s));
+            if (checkForReady()) {
                 GrabTweet a = new GrabTweet(MainActivity.this);
-                a.login();
+                s = a.login(uid, pwd);
 
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
 //                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
-//                s = a.GrabTweetInfo(uid);
+//                s = a.getTweetInfo(uid);
 //                s += proxy + "\n";
-//                s += a.GrabTweetInfo("3373931552");
-//                s += a.GrabTweetInfo("1789247505");
-                s = a.test();
+                s += a.getUserInfo("3373931552");
+//                s += a.getUserInfo("1789247505");
+                s += a.getUserInfo("1772392290");
 
             } else {
                 s = "NetWork is disconnect!!!";
@@ -69,6 +74,26 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    boolean checkForReady() {
+        boolean isconnect = WifiControl.isConnect(MainActivity.this);
+        boolean ready = false;
+        if (isconnect == true) {
+            uid = uidedt.getText().toString();
+            pwd = pwdedt.getText().toString();
+            if ((uid == null) || (uid.equals(""))) {
+                Toast.makeText(MainActivity.this, "UID is null !!!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            if ((pwd == null) || (pwd.equals(""))) {
+                Toast.makeText(MainActivity.this, "passwd is null !!!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+//            ShareP.setUidToPref(MainActivity.this, uid);
+//            ShareP.setPwdToPref(MainActivity.this, pwd);
+            ready = true;
+        }
+        return ready;
+    }
 
     private boolean allowWriteExternal() {
         if (selfPermissionGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -90,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 ;//takePhoto();
                 Toast.makeText(MainActivity.this, "Permission allowed", Toast.LENGTH_SHORT).show();
-                new Thread(runnable).start();
+//                new Thread(runnable).start();
             } else {
                 // Permission Denied
                 Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
@@ -135,26 +160,32 @@ public class MainActivity extends AppCompatActivity {
         tv = findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
 
-        button = findViewById(R.id.button);
+        login_btn = findViewById(R.id.login);
+        uc_btn = findViewById(R.id.uc);
         stock_btn = findViewById(R.id.stock);
-//        button.setVisibility(View.INVISIBLE);
+//        login_btn.setVisibility(View.INVISIBLE);
 
-        uidtv = findViewById(R.id.textView2);
-        uidtv.setText(ShareP.getUIDFromPref(this));
-        uid = uidtv.getText().toString();
+        uidedt = findViewById(R.id.uid_et);
+        pwdedt = findViewById(R.id.pswd_et);
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+        uidedt.setText(ShareP.getUidFromPref(this));
+        pwdedt.setText(ShareP.getPwdFromPref(this));
+//        uidedt.clearFocus();
+//        pwdedt.clearFocus();
+
+        login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String spec = "https://weibo.cn/u/" + uid + "?page=1";
+                new Thread(runnable).start();
+            }
+        });
+
+        uc_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String spec = "https://weibo.cn/u/1772392290";
                 OpenWebView.open(MainActivity.this, spec);
-//                WifiControl mwc = new WifiControl();
-//                try {
-//                    mwc.setHttpPorxySetting(MainActivity.this, "192.168.1.176", 8888);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -192,8 +223,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (allowWriteExternal())
-            new Thread(runnable).start();
+        if (allowWriteExternal()) {
+            ;//new Thread(runnable).start();
+        }
     }
 
 

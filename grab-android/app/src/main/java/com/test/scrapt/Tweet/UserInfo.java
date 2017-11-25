@@ -6,6 +6,14 @@ package com.test.scrapt.Tweet;
 
 public class UserInfo {
     public String uid;
+    public int integral = 0;
+    public int tweet = 0;
+    public int follow = 0;
+    public int fan = 0;
+
+    public UserInfo(String uid) {
+        this.uid = uid;
+    }
 
     public String getUid() {
         return uid;
@@ -15,13 +23,4 @@ public class UserInfo {
         this.uid = uid;
     }
 
-    public String getIntegral() {
-        return integral;
-    }
-
-    public void setIntegral(String integral) {
-        this.integral = integral;
-    }
-
-    public String integral;
 }

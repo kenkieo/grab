@@ -15,7 +15,7 @@ android {
     def offset = date.getTime() / 1000
     def code = offset.intValue()
     defaultConfig {
-        applicationId "com.test.scrapt"
+        applicationId "zj.com.scrapt"
         minSdkVersion 19
         targetSdkVersion 27
         versionCode code

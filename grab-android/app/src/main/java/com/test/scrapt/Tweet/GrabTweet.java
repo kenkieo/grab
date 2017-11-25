@@ -105,6 +105,7 @@ public class GrabTweet {
         t.setTweet(items.tweet + "");
         t.setFollow(items.follow + "");
         t.setFan(items.fan + "");
+        t.setIntegral(items.integral + "");
         t.setDate(time);
 
         return t;
@@ -128,7 +129,57 @@ public class GrabTweet {
 
     }
 
-    public String GrabTweetInfo(String uid) {
+    String printDiff(String t, String tdb) {
+        int pre, now;
+        String s = "";
+        pre = Integer.parseInt(tdb);
+        now = Integer.parseInt(t);
+
+        if (pre == now) {
+            s += pre + "";
+        } else if (pre > now) {
+            s += pre + "-" + (pre - now);
+        } else if (now > pre) {
+            s += pre + "+" + (now - pre);
+        }
+
+        return s;
+    }
+
+    public String getUserInfo(String uid) {
+        String s;
+        TweetItem items = new TweetItem(uid);
+        String spec = "https://weibo.com/p/100505" + uid + "/info?mod=pedit_more";
+        try {
+            URL url = new URL(spec);
+            s = getHtml(url);
+            Document d = Jsoup.parse(s);
+            s = ParseUserInfo.parse(items, d);
+            TweetNote t = TweetItemConvert(items);
+            TweetNote tdb = getTweetFromDB(uid);
+            s = items.toString() + "\n";
+            if (t.isEqual(tdb) == false) {
+                s = s + ((tdb == null) ? "-" : printDiff(t.getFollow(), tdb.getFollow())) + "  " +
+                        ((tdb == null) ? "-" : printDiff(t.getFan(), tdb.getFan())) + "  " +
+                        ((tdb == null) ? "-" : printDiff(t.getTweet(), tdb.getTweet())) + "  " +
+                        ((tdb == null) ? "-" : printDiff(t.getIntegral(), tdb.getIntegral())) + "  Update !!!";
+                if ((tdb == null) || (!(t.getFollow().equals("0") || t.getFan().equals("0") || t.getTweet().equals("0") || t.getIntegral().equals("0")))) {
+                    SetTweetFromDB(t, tdb);
+                    Log.e("ZTAG", "set to DB");
+                }
+            }
+            Log.e("ZTAG", "getUserInfo getUserInfo getUserInfo" + s);
+        } catch (Exception e) {
+            e.printStackTrace();
+            s = e.getMessage();
+
+        }
+
+        s += "\n\n";
+        return s;
+    }
+
+    public String getTweetInfo(String uid) {
         TweetItem items = new TweetItem(uid);
 
         String s;
@@ -257,42 +308,37 @@ public class GrabTweet {
         }
     }
 
-    public String test() {
+
+    public String login(String usr, String pwd) {
         String s;
+        String userName = usr;
+        String userPwd = pwd;
+        boolean hasFresh = false;
 
-        String spec = "https://weibo.com/p/1005051772392290/info?mod=pedit_more";
-        try {
-            URL url = new URL(spec);
-            s = getHtml(url);
-            Document d = Jsoup.parse(s);
-            s = ParseUserInfo.parse(d);
-            Log.e("ZTAG", "test test test" + s);
-        } catch (Exception e) {
-            e.printStackTrace();
-            s = e.getMessage();
-
+        if (!ShareP.getUidFromPref(mContext).equals(userName)) {
+            hasFresh = true;
         }
-
-        s += "\n";
-        return s;
-    }
-
-    public String login() {
-        String s;
-        String userName = "75023143@qq.com";
-        String userPass = "331730216";
-
-        Log.e("ZTAG", "have cookies: " + mCookiesStore.getCookieNum());
-        if (mCookiesStore.getCookieNum() == 4) {
-            return "has cookies";
+        if (!ShareP.getPwdFromPref(mContext).equals(userPwd)) {
+            hasFresh = true;
         }
+//        ShareP.setUidToPref(MainActivity.this, uid);
+//        ShareP.setPwdToPref(MainActivity.this, pwd);
+        int cookieNum = mCookiesStore.getCookieNum();
+
+        if (hasFresh == false) {
+            Log.e("ZTAG", "have cookies: " + cookieNum);
+            if (cookieNum == 4) {
+                return "has cookies " + cookieNum + "\n\n\n";
+            }
+        }
+        mCookiesStore.clear();
         try {
             String data = "username=" + URLEncoder.encode(userName, "UTF-8")
-                    + "&password=" + URLEncoder.encode(userPass, "UTF-8")
+                    + "&password=" + URLEncoder.encode(userPwd, "UTF-8")
                     + "&savestate=1&r=&ec=0&pagerefer=&entry=mweibo&wentry=&loginfrom=&client_id=&code=&qq=&mainpageflag=1&hff=&hfp=";
             RequestBody formBody = new FormBody.Builder()
                     .add("username", userName)
-                    .add("password", userPass)
+                    .add("password", userPwd)
                     .add("savestate", "1")
                     .add("mainpageflag", "1")
                     .add("ec", "Jurassic Park")
@@ -317,87 +363,19 @@ public class GrabTweet {
             Log.e("ZTAG", "request success: " + request.headers());
             Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            s = response.headers().toString();
+            s = response.code() + "";
 
+//            s = "get cookies";
+            ShareP.setUidToPref(mContext, userName);
+            ShareP.setPwdToPref(mContext, userPwd);
             Log.e("ZTAG", "response success: " + s);
 
         } catch (Exception e) {
             e.printStackTrace();
             s = e.getMessage();
         }
-        return s;
+        return s + "\n";
     }
 
-    public String login_bak() {
-        String spec = "https://passport.weibo.cn/sso/login_bak";
-        String userName = "75023143@qq.com";
-        String userPass = "331730216";
 
-        String cookies = getCookie();
-        if (cookies != null || cookies != "") {
-            ;
-        } else {
-            return "cookies OK !!!" + cookies;
-        }
-        try {
-            URL url = new URL(spec);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setReadTimeout(5000);
-            urlConnection.setConnectTimeout(5000);
-            String data = "username=" + URLEncoder.encode(userName, "UTF-8")
-                    + "&password=" + URLEncoder.encode(userPass, "UTF-8")
-                    + "&savestate=1&r=&ec=0&pagerefer=&entry=mweibo&wentry=&loginfrom=&client_id=&code=&qq=&mainpageflag=1&hff=&hfp=";
-
-            Log.e("ZTAG", "login_bak============data: " + data);
-
-            urlConnection.setRequestProperty("Accept", "*/*");
-            urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (compatible;MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)");
-            urlConnection.setRequestProperty("Referer", "https://passport.weibo.cn/signin/login_bak");
-            urlConnection.setRequestProperty("Accept - Encoding", "gzip,deflate");
-            urlConnection.setRequestProperty("Accept-Language", "zh-cn");
-            urlConnection.setRequestProperty("Connection", "keep-alive");
-            urlConnection.setRequestProperty("Content-Length", String.valueOf(data.getBytes().length));
-
-            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            urlConnection.setRequestProperty("Host", "passport.weibo.cn");
-            urlConnection.setDoOutput(true);
-            urlConnection.setDoInput(true);
-
-
-            urlConnection.connect();
-
-
-            byte[] bypes = data.getBytes();
-            urlConnection.getOutputStream().write(bypes);// 输入参数
-            InputStream inStream = urlConnection.getInputStream();
-
-            String s = new String(readInputStream(inStream), "gbk");
-            Log.e("ZTAG", "b[1]:" + urlConnection.getHeaderFields());
-
-            Map<String, List<String>> headerFields2 = urlConnection.getHeaderFields();
-            for (String s1 : headerFields2.keySet()) {
-                List<String> c = headerFields2.get(s1);
-                for (String cookie : c) {
-                    String z = cookie.split(";")[0];
-                    Log.e("ZTAG", "headerfield: " + z);
-                }
-            }
-
-
-            String[] a = s.split(",");
-            String[] b = a[0].split(":");
-//            Log.e("ZTAG", "b[1]:" + b[1]);
-            if (b[1].toString().equals("20000000")) {
-                Map<String, List<String>> headerFields = urlConnection.getHeaderFields();
-                setCookies(headerFields);
-                return s;
-            } else {
-                return "error !!!";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return e.getMessage();
-        }
-    }
 }
