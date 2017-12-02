@@ -7,7 +7,7 @@ import sys
 import os
 import json
 import datetime
-import urllib
+import yougu
 
 
 now = datetime.datetime.now()
@@ -539,22 +539,23 @@ class Weibo:
 
 
 ########################################################
-if __name__ == "__main__":
+if __name__ == "__main2__":
     uid = '1772392290'
     # uid = '3373931552'
 
     a = Weibo()
-    # a.login()
-    a.test()
+    a.login()
+    # a.test()
     # a.getUserInfo(uid)
     #
     # return
-    # a.getTweetHtml(uid)
-    # a.getFollowHtml(uid)
-    # a.getAtUserHtml(uid)
-    # a.parseTweet(uid)
-    # a.parseFollow(uid)
-    # a.parseAtUser(uid)
+    a.getTweetHtml(uid)
+    a.getFollowHtml(uid)
+    a.getAtUserHtml(uid)
+    a.parseTweet(uid)
+    a.parseFollow(uid)
+    a.parseAtUser(uid)
 
-    # yougu.getyougu()
+if __name__ == "__main__":
+    yougu.getfollow()
     print 'end'

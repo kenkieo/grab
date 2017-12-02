@@ -52,24 +52,26 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             String s = "";
-            EventBus.getDefault().post(new MessageEvent(s));
+            EventBus.getDefault().post(new MessageEvent(s, true));
             if (checkForReady()) {
                 GrabTweet a = new GrabTweet(MainActivity.this);
                 s = a.login(uid, pwd);
-
+                EventBus.getDefault().post(new MessageEvent(s, false));
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
 //                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
 //                s = a.getTweetInfo(uid);
 //                s += proxy + "\n";
-                s += a.getUserInfo("3373931552");
+                s = a.getUserInfo("3373931552");
+                EventBus.getDefault().post(new MessageEvent(s, false));
 //                s += a.getUserInfo("1789247505");
-                s += a.getUserInfo("1772392290");
+                s = a.getUserInfo("1772392290");
+                EventBus.getDefault().post(new MessageEvent(s, false));
 
             } else {
                 s = "NetWork is disconnect!!!";
+                EventBus.getDefault().post(new MessageEvent(s, false));
             }
 
-            EventBus.getDefault().post(new MessageEvent(s));
 
         }
     };
@@ -102,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_CODE_ACCESS_EXTERNAL_STORAGE);
             }
-
             return false;
         } else {
             return true;
@@ -148,7 +149,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
-        tv.setText("" + event.message);
+        if (event.clear == false) {
+            tv.append(event.message);
+        } else {
+            tv.setText("" + event.message);
+        }
     }
 
     @Override

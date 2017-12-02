@@ -24,9 +24,10 @@ public class TweetNote {
     private String integral;
     private String fan;
     private String date;
+
     @Generated(hash = 1027362690)
     public TweetNote(Long id, @NotNull String uid, String tweet, String follow,
-            String integral, String fan, String date) {
+                     String integral, String fan, String date) {
         this.id = id;
         this.uid = uid;
         this.tweet = tweet;
@@ -35,9 +36,11 @@ public class TweetNote {
         this.fan = fan;
         this.date = date;
     }
+
     @Generated(hash = 1042784436)
     public TweetNote() {
     }
+
     public String getIntegral() {
         return integral;
     }
@@ -66,7 +69,9 @@ public class TweetNote {
             if (tn1.getTweet().equals(getTweet())) {
                 if (tn1.getFollow().equals(getFollow())) {
                     if (tn1.getFan().equals(getFan())) {
-                        return true;
+                        if (tn1.getIntegral().equals(getIntegral())) {
+                            return true;
+                        }
                     }
                 }
             }

@@ -11,6 +11,7 @@ import com.test.scrapt.Tweet.DataBase.DaoMaster;
 import com.test.scrapt.Tweet.DataBase.DaoSession;
 import com.test.scrapt.Tweet.DataBase.DataBaseImpl;
 import com.test.scrapt.Tweet.DataBase.TweetNote;
+import com.test.scrapt.Utils.Zlog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -184,6 +185,7 @@ public class GrabTweet {
 
         String s;
         String spec = "https://weibo.cn/u/" + uid + "?page=1";
+        Zlog.e(spec);
         try {
             URL url = new URL(spec);
             s = getHtml(url);
@@ -193,10 +195,9 @@ public class GrabTweet {
             TweetNote t = TweetItemConvert(items);
             TweetNote tdb = getTweetFromDB(uid);
             if (t.isEqual(tdb) == false) {
-                s = s + "  Update !!!" + "\n        " + ((tdb == null) ? "0" : tdb.getTweet()) + "  " + ((tdb == null) ? "0" : tdb.getFollow()) + "  " + ((tdb == null) ? "0" : tdb.getFan());
+                s = s + "  Update !!!\n" + ((tdb == null) ? "0" : tdb.getTweet()) + "  " + ((tdb == null) ? "0" : tdb.getFollow()) + "  " + ((tdb == null) ? "0" : tdb.getFan());
                 SetTweetFromDB(t, tdb);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             s = e.getMessage();

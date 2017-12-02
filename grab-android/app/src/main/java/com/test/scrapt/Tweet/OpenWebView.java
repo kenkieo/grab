@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.test.scrapt.Utils.Zlog;
+
 /**
  * Created by Administrator on 2017/11/10.
  */
@@ -16,5 +18,9 @@ public class OpenWebView {
         Uri content_url = Uri.parse(url);
         intent.setData(content_url);
         mContext.startActivity(intent);
+
+        Zlog.trace();
+
+        Zlog.debug();
     }
 }

@@ -6,9 +6,11 @@ package com.test.scrapt.Tweet;
 
 public class MessageEvent {
     public final String message;
+    public final boolean clear;
 
-    public MessageEvent(String message) {
+    public MessageEvent(String message,boolean clear) {
         this.message = message;
+        this.clear = clear;
     }
 }
 
