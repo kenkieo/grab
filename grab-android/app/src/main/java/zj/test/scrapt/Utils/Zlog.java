@@ -1,4 +1,4 @@
-package com.test.scrapt.Utils;
+package zj.test.scrapt.Utils;
 
 import android.util.Log;
 
@@ -8,12 +8,21 @@ import android.util.Log;
 
 public class Zlog {
 
+
+    public static void d(String str) {
+        Log.d("ztag", "" + str);
+    }
+
     public static void e(String str) {
         Log.e("ztag", "" + str);
     }
 
-    public static void d(String str) {
-        Log.d("ztag", "" + str);
+    public static void i(String str) {
+        Log.i("ztag", "" + str);
+    }
+
+    public static void v(String str) {
+        Log.v("ztag", "" + str);
     }
 
     public static void w(String str) {

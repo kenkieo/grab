@@ -4,7 +4,7 @@
 extern "C"
 JNIEXPORT jstring
 
-JNICALL Java_com_test_scrapt_Tweet_MainActivity_stringFromJNI(
+JNICALL Java_zj_test_scrapt_Tweet_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
     std::string hello = "Hello from C++";

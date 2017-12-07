@@ -1,4 +1,4 @@
-package com.test.scrapt.Tweet;
+package zj.test.scrapt.Tweet;
 
 import android.content.Context;
 import android.content.SharedPreferences;

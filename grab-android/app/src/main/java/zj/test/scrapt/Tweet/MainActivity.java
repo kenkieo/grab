@@ -1,4 +1,4 @@
-package com.test.scrapt.Tweet;
+package zj.test.scrapt.Tweet;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,9 +18,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.test.scrapt.R;
-import com.test.scrapt.Stock.StockActivity;
-import com.test.scrapt.Wifi.WifiControl;
+import zj.test.scrapt.R;
+import zj.test.scrapt.Stock.StockActivity;
+import zj.test.scrapt.Wifi.WifiControl;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,24 +52,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             String s = "";
-            EventBus.getDefault().post(new MessageEvent(s, true));
+            EventBus.getDefault().post(new MainEvent(s, true));
             if (checkForReady()) {
                 GrabTweet a = new GrabTweet(MainActivity.this);
                 s = a.login(uid, pwd);
-                EventBus.getDefault().post(new MessageEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
 //                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
 //                s = a.getTweetInfo(uid);
 //                s += proxy + "\n";
                 s = a.getUserInfo("3373931552");
-                EventBus.getDefault().post(new MessageEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
 //                s += a.getUserInfo("1789247505");
                 s = a.getUserInfo("1772392290");
-                EventBus.getDefault().post(new MessageEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
 
             } else {
                 s = "NetWork is disconnect!!!";
-                EventBus.getDefault().post(new MessageEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
             }
 
 
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
+    public void onMessageEvent(MainEvent event) {
         if (event.clear == false) {
             tv.append(event.message);
         } else {

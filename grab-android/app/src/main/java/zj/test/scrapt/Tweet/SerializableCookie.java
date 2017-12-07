@@ -1,4 +1,4 @@
-package com.test.scrapt.Tweet;
+package zj.test.scrapt.Tweet;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

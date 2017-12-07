@@ -1,4 +1,4 @@
-package com.test.scrapt;
+package zj.test.scrapt;
 
 import android.app.Application;
 

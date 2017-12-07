@@ -1,4 +1,4 @@
-package com.test.scrapt.Time;
+package zj.test.scrapt.Time;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

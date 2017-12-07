@@ -1,17 +1,10 @@
-package com.test.scrapt.Tweet;
+package zj.test.scrapt.Tweet;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-
-import com.test.scrapt.Time.NowDataTime;
-import com.test.scrapt.Tweet.DataBase.DaoMaster;
-import com.test.scrapt.Tweet.DataBase.DaoSession;
-import com.test.scrapt.Tweet.DataBase.DataBaseImpl;
-import com.test.scrapt.Tweet.DataBase.TweetNote;
-import com.test.scrapt.Utils.Zlog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -36,6 +29,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import zj.test.scrapt.Time.NowDataTime;
+import zj.test.scrapt.Tweet.DataBase.DaoMaster;
+import zj.test.scrapt.Tweet.DataBase.DaoSession;
+import zj.test.scrapt.Tweet.DataBase.DataBaseImpl;
+import zj.test.scrapt.Tweet.DataBase.TweetNote;
 
 /**
  * Created by Administrator on 2017/11/9.
@@ -149,13 +147,13 @@ public class GrabTweet {
 
     public String getUserInfo(String uid) {
         String s;
-        TweetItem items = new TweetItem(uid);
+        TweetItem items = new TweetItem.Builder().setUid(uid).build();
         String spec = "https://weibo.com/p/100505" + uid + "/info?mod=pedit_more";
         try {
             URL url = new URL(spec);
             s = getHtml(url);
             Document d = Jsoup.parse(s);
-            s = ParseUserInfo.parse(items, d);
+            s = ParseTweetItem.parse(items, d);
             TweetNote t = TweetItemConvert(items);
             TweetNote tdb = getTweetFromDB(uid);
             s = items.toString() + "\n";
@@ -180,32 +178,7 @@ public class GrabTweet {
         return s;
     }
 
-    public String getTweetInfo(String uid) {
-        TweetItem items = new TweetItem(uid);
 
-        String s;
-        String spec = "https://weibo.cn/u/" + uid + "?page=1";
-        Zlog.e(spec);
-        try {
-            URL url = new URL(spec);
-            s = getHtml(url);
-            Document d = Jsoup.parse(s);
-            s = uid + " ";
-            s += ParseTweetItems.parse(items, d);
-            TweetNote t = TweetItemConvert(items);
-            TweetNote tdb = getTweetFromDB(uid);
-            if (t.isEqual(tdb) == false) {
-                s = s + "  Update !!!\n" + ((tdb == null) ? "0" : tdb.getTweet()) + "  " + ((tdb == null) ? "0" : tdb.getFollow()) + "  " + ((tdb == null) ? "0" : tdb.getFan());
-                SetTweetFromDB(t, tdb);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            s = e.getMessage();
-
-        }
-        s += "\n";
-        return s;
-    }
 
     protected String getCookie() {
         CookieSyncManager.createInstance(mContext);

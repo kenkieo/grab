@@ -1,10 +1,10 @@
-package com.test.scrapt.Tweet;
+package zj.test.scrapt.Tweet;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.test.scrapt.Utils.Zlog;
+import zj.test.scrapt.Utils.Zlog;
 
 /**
  * Created by Administrator on 2017/11/10.

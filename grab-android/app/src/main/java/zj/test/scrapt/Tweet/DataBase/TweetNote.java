@@ -1,4 +1,4 @@
-package com.test.scrapt.Tweet.DataBase;
+package zj.test.scrapt.Tweet.DataBase;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -27,7 +27,7 @@ public class TweetNote {
 
     @Generated(hash = 1027362690)
     public TweetNote(Long id, @NotNull String uid, String tweet, String follow,
-                     String integral, String fan, String date) {
+            String integral, String fan, String date) {
         this.id = id;
         this.uid = uid;
         this.tweet = tweet;

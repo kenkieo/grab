@@ -1,16 +1,15 @@
-package com.test.scrapt.Tweet;
+package zj.test.scrapt.Stock;
 
 /**
  * Created by Administrator on 2017/11/13.
  */
 
-public class MessageEvent {
+public class StockEvent {
     public final String message;
     public final boolean clear;
 
-    public MessageEvent(String message,boolean clear) {
+    public StockEvent(String message, boolean clear) {
         this.message = message;
         this.clear = clear;
     }
 }
-

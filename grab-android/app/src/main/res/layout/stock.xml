@@ -4,10 +4,6 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/list_stock"
-        android:layout_width="match_parent"
-        android:layout_height="320dp" />
 
     <TextView
         android:id="@+id/tv_stock"

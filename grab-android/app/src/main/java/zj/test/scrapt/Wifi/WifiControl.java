@@ -1,4 +1,4 @@
-package com.test.scrapt.Wifi;
+package zj.test.scrapt.Wifi;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

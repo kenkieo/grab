@@ -1,4 +1,4 @@
-package com.test.scrapt.Tweet;
+package zj.test.scrapt.Tweet;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
  * Created by Administrator on 2017/11/23.
  */
 
-public class ParseUserInfo extends ParseItem {
+public class ParseTweetItem extends ParseItem {
 
     public static String parse(TweetItem item, Document document) {
         Elements e = document.select("script");
