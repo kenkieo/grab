@@ -3,9 +3,11 @@ package zj.test.scrapt.Tweet;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -166,8 +168,13 @@ public class GrabTweet {
                     SetTweetFromDB(t, tdb);
                     Log.e("ZTAG", "set to DB");
                 }
+                if (!t.getIntegral().equals("0")) {
+//                    ((MainActivity) (mContext)).record_btn.setVisibility(View.VISIBLE);
+                    EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.RECORD_BTN, true));
+                }
             }
-            Log.e("ZTAG", "getUserInfo getUserInfo getUserInfo" + s);
+//            EventBus.getDefault().post(new MainEvent(s, 1, false));
+//            Log.e("ZTAG", "getUserInfo getUserInfo getUserInfo" + s);
         } catch (Exception e) {
             e.printStackTrace();
             s = e.getMessage();
@@ -177,7 +184,6 @@ public class GrabTweet {
         s += "\n\n";
         return s;
     }
-
 
 
     protected String getCookie() {

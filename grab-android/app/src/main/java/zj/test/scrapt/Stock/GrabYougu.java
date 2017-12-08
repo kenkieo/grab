@@ -40,6 +40,7 @@ public class GrabYougu {
     public String getJsonArray(String s, String name) {
         try {
             JSONObject jsonObject = new JSONObject(s);
+            if (!jsonObject.has(name)) return null;
             String a = jsonObject.getJSONArray(name).toString();
             return a;
         } catch (Exception e) {
@@ -263,6 +264,7 @@ public class GrabYougu {
         try {
             String resp = getUrlResponse(spec);
             String result = getJsonArray(resp, "result");
+            if (result == null) return s;
             JSONArray jsonArray = new JSONArray(result);
             String r;
             StringBuffer ss = new StringBuffer();

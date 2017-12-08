@@ -1,6 +1,7 @@
 package zj.test.scrapt.Tweet;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -18,13 +19,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import zj.test.scrapt.R;
-import zj.test.scrapt.Stock.StockActivity;
-import zj.test.scrapt.Wifi.WifiControl;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import zj.test.scrapt.R;
+import zj.test.scrapt.Stock.StockActivity;
+import zj.test.scrapt.Wifi.WifiControl;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     Button login_btn = null;
     Button uc_btn = null;
     Button stock_btn = null;
+    Button record_btn = null;
 
 
     String uid;
@@ -52,24 +54,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             String s = "";
-            EventBus.getDefault().post(new MainEvent(s, true));
+            EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, true));
             if (checkForReady()) {
                 GrabTweet a = new GrabTweet(MainActivity.this);
                 s = a.login(uid, pwd);
-                EventBus.getDefault().post(new MainEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
 //                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
 //                s = a.getTweetInfo(uid);
 //                s += proxy + "\n";
                 s = a.getUserInfo("3373931552");
-                EventBus.getDefault().post(new MainEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
 //                s += a.getUserInfo("1789247505");
                 s = a.getUserInfo("1772392290");
-                EventBus.getDefault().post(new MainEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
 
             } else {
                 s = "NetWork is disconnect!!!";
-                EventBus.getDefault().post(new MainEvent(s, false));
+                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
             }
 
 
@@ -149,10 +151,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MainEvent event) {
-        if (event.clear == false) {
-            tv.append(event.message);
-        } else {
-            tv.setText("" + event.message);
+        if (event.type == MainEvent.EventType.MESSAGE_DIS) {
+            if (event.clear) {
+                if (tv != null) tv.setText("" + event.message);
+            } else {
+                if (tv != null) tv.append(event.message);
+            }
+        } else if (event.type == MainEvent.EventType.RECORD_BTN) {
+            if (event.clear) {
+                if (record_btn != null) record_btn.setVisibility(View.VISIBLE);
+            } else {
+                if (record_btn != null) record_btn.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -172,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         uidedt = findViewById(R.id.uid_et);
         pwdedt = findViewById(R.id.pswd_et);
+        record_btn = findViewById(R.id.record);
 
 
         uidedt.setText(ShareP.getUidFromPref(this));
@@ -183,6 +194,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new Thread(runnable).start();
+            }
+        });
+
+        record_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                String pkg = "zj.zfenlly.tools";
+                String className = "zj.zfenlly.main.MainActivity";
+                ComponentName cn = new ComponentName(pkg, className);
+                intent.setComponent(cn);
+                startActivity(intent);
             }
         });
 

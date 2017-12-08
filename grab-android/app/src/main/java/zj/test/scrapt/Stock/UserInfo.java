@@ -184,8 +184,8 @@ public class UserInfo {
             s = "";
         }
 
-        return this.id + " : " + this.nickname + " " + profitRate + " \navg days: " +
-                avgDays + " avg gain: " + avgProfit + " success: " + s + "% tradingFrequency: " + tradingFrequency + "\n";
+        return s + "% " + "      " + this.profitRate + "         " + this.id + " : " + this.nickname + "\navg days: " +
+                this.avgDays + " avg gain: " + this.avgProfit + " tradingFreq: " + this.tradingFrequency + "\n";
     }
 
     public int getId() {

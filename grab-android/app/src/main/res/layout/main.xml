@@ -34,11 +34,17 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/record"
+        android:visibility="invisible"
+        android:text="Record" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/uc"
-        android:text="UC" />
+        android:text="Explorer" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/stock"
-        android:text="Button" />
+        android:text="Youguu" />
 </LinearLayout>
