@@ -49,7 +49,7 @@ public class CookiesStore {
                 String encodedCookie = cookiePrefs.getString(COOKIE_NAME_PREFIX + name, null);
                 if (encodedCookie != null) {
                     cookie = parseCookie(encodedCookie);
-                    Log.e("ZTAG", "parseCookie: expiresAt " + (cookie.persistent() ? cookie.expiresAt() : "null"));
+//                    Log.e("ZTAG", "parseCookie: expiresAt " + (cookie.persistent() ? cookie.expiresAt() : "null"));
                     if (cookie.persistent()) {
                         if (cookie.expiresAt() >= (new Date()).getTime()) {
                             cookies.put(name, cookie);

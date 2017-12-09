@@ -36,15 +36,16 @@ public class StockActivity extends Activity {
                 for (UserInfo a : sa) {
                     g.getAttUserInfo(a.getId() + "");
                     g.getAttUserInfo2(a.getId() + "");
+                    g.getAttUserInfo3(a.getId() + "");
                 }
-                sa = g.getListUser();
-                for (UserInfo a : sa) {
-                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------------------", false));
-                    EventBus.getDefault().post(new StockEvent(a.toString(), false));
-                    s = g.getUserTrade(a.getId() + "");
-                    EventBus.getDefault().post(new StockEvent(s, false));
+//                sa = g.getListUser();
+//                for (UserInfo a : sa) {
 //                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------------------", false));
-                }
+//                    EventBus.getDefault().post(new StockEvent(a.toString(), false));
+//                    s = g.getUserTrade(a.getId() + "");
+//                    EventBus.getDefault().post(new StockEvent(s, false));
+////                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------------------", false));
+//                }
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -28,6 +28,17 @@ public class UserInfo {
     private String totalStock = "";
     private String tradingFrequency = "";
 
+    private String tRank = "";
+    private String mRise = "";
+    private String wProfit = "";
+    private String mRank = "";
+    private String status = "";
+    private String tProfit = "";
+    private String tRise = "";
+    private String wRise = "";
+    private String mProfit = "";
+    private String wRank = "";
+
     public UserInfo(int id) {
         this.id = id;
     }
@@ -36,6 +47,96 @@ public class UserInfo {
         this.id = id;
         this.nickname = nickname;
         this.profitRate = profitRate;
+    }
+
+    public String gettRank() {
+        return tRank;
+    }
+
+    public UserInfo settRank(String tRank) {
+        this.tRank = tRank;
+        return this;
+    }
+
+    public String getmRise() {
+        return mRise;
+    }
+
+    public UserInfo setmRise(String mRise) {
+        this.mRise = mRise;
+        return this;
+    }
+
+    public String getwProfit() {
+        return wProfit;
+    }
+
+    public UserInfo setwProfit(String wProfit) {
+        this.wProfit = wProfit;
+        return this;
+    }
+
+    public String getmRank() {
+        return mRank;
+    }
+
+    public UserInfo setmRank(String mRank) {
+        this.mRank = mRank;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public UserInfo setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public String gettProfit() {
+        return tProfit;
+    }
+
+    public UserInfo settProfit(String tProfit) {
+        this.tProfit = tProfit;
+        return this;
+    }
+
+    public String gettRise() {
+        return tRise;
+    }
+
+    public UserInfo settRise(String tRise) {
+        this.tRise = tRise;
+        return this;
+    }
+
+    public String getwRise() {
+        return wRise;
+    }
+
+    public UserInfo setwRise(String wRise) {
+        this.wRise = wRise;
+        return this;
+    }
+
+    public String getmProfit() {
+        return mProfit;
+    }
+
+    public UserInfo setmProfit(String mProfit) {
+        this.mProfit = mProfit;
+        return this;
+    }
+
+    public String getwRank() {
+        return wRank;
+    }
+
+    public UserInfo setwRank(String wRank) {
+        this.wRank = wRank;
+        return this;
     }
 
     public String getAvgDays() {
@@ -185,7 +286,18 @@ public class UserInfo {
         }
 
         return s + "% " + "      " + this.profitRate + "         " + this.id + " : " + this.nickname + "\navg days: " +
-                this.avgDays + " avg gain: " + this.avgProfit + " tradingFreq: " + this.tradingFrequency + "\n";
+                this.avgDays + " avg gain: " + this.avgProfit + " tradingFreq: " + this.tradingFrequency + "\n" +
+                "" + tRank + "" +
+                mRise + "" +
+                wProfit + "" +
+                mRank + "" +
+                status + "" +
+                tProfit + "" +
+                tRise + "" +
+                wRise + "" +
+                mProfit + "" +
+                wRank;
+
     }
 
     public int getId() {

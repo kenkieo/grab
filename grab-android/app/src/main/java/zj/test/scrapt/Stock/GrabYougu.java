@@ -246,6 +246,53 @@ public class GrabYougu {
         return s;
     }
 
+    public String getAttUserInfo3(String uid) {
+        String s = "";
+        String a = "http://mncg.youguu.com/youguu/simtrade/showmyrank/";
+
+        try {
+            a += g.a("0530010010921".getBytes("UTF-8")) + "/";
+            a += g.a("201712011138191628501".getBytes("UTF-8")) + "/";
+            a += g.a(uid.getBytes("UTF-8")) + "/";
+            a += g.a("1".getBytes("UTF-8"));
+            Log.w("ZTAG", "" + a);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String spec = a;
+        try {
+            String resp = getUrlResponse(spec);
+            a = com.jhss.youguu.common.e.g.a(resp);
+            Log.v("ZTAG", "" + a);
+
+            JSONObject jsonObject = new JSONObject(a);
+            if (jsonObject == null) {
+                return s;
+            }
+
+
+            UserInfo mUserInfo = mp.get(uid);
+            mUserInfo.settRank(jsonObject.getString("tRank"))
+                    .setmRise(jsonObject.getString("mRise"))
+                    .setwProfit(jsonObject.getString("wProfit"))
+                    .setmRank(jsonObject.getString("mRank"))
+                    .setStatus(jsonObject.getString("status"))
+                    .settProfit(jsonObject.getString("tProfit"))
+                    .settRise(jsonObject.getString("tRise"))
+                    .setmProfit(jsonObject.getString("mProfit"))
+                    .setwRise(jsonObject.getString("wRise"))
+                    .setwRank(jsonObject.getString("wRank"));
+            mp.put(uid, mUserInfo);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            s = e.getMessage();
+        }
+
+        return s;
+    }
+
     public String getUserTrade(String uid) {
         String a = "";
         String s = "";
