@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">ZGrab</string>
+    <string name="suc_rate">success rate:</string>
+    <string name="total_profit_rate">total profit rate:</string>
+    <string name="id">id:</string>
+    <string name="avg_days">avg days:</string>
+    <string name="avg_profit">avg profit:</string>
+    <string name="trade_freq">trade freq:</string>
+    <string name="t_rank">total rank:</string>
+    <string name="m_rise">month rise:</string>
+    <string name="w_profit">week profit:</string>
+    <string name="m_rank">month rank:</string>
+    <string name="t_profit">total profit:</string>
+    <string name="t_rise">total rise:</string>
+    <string name="w_rise">week rise:</string>
+    <string name="m_profit">month profit:</string>
+    <string name="w_rank">week rank:</string>
 </resources>

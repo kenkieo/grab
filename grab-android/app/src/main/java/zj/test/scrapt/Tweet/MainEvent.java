@@ -9,6 +9,12 @@ public class MainEvent {
     public final int type;
     public final boolean clear;
 
+    public MainEvent(String message, boolean clear) {
+        this.message = message;
+        this.type = EventType.MESSAGE_DIS;
+        this.clear = clear;
+    }
+
     public MainEvent(String message, int type, boolean clear) {
         this.message = message;
         this.type = type;

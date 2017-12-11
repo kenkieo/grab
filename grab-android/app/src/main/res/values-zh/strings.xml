@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ZGrab</string>
+    <string name="suc_rate">成功率:</string>
+    <string name="total_profit_rate">总收益率:</string>
+    <string name="id">ID:</string>
+    <string name="avg_days">平均持股天数:</string>
+    <string name="avg_profit">平均收益:</string>
+    <string name="trade_freq">交易频率:</string>
+    <string name="t_rank">总排名:</string>
+    <string name="m_rise">月增:</string>
+    <string name="w_profit">周收益:</string>
+    <string name="m_rank">周排名:</string>
+    <string name="t_profit">总收益:</string>
+    <string name="t_rise">总增涨:</string>
+    <string name="w_rise">周增涨:</string>
+    <string name="m_profit">月收益:</string>
+    <string name="w_rank">周排名:</string>
+</resources>

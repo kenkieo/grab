@@ -54,24 +54,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             String s = "";
-            EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, true));
+            EventBus.getDefault().post(new MainEvent(s, true));
             if (checkForReady()) {
                 GrabTweet a = new GrabTweet(MainActivity.this);
                 s = a.login(uid, pwd);
-                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
 //                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
 //                s = a.getTweetInfo(uid);
 //                s += proxy + "\n";
                 s = a.getUserInfo("3373931552");
-                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
 //                s += a.getUserInfo("1789247505");
                 s = a.getUserInfo("1772392290");
-                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
 
             } else {
                 s = "NetWork is disconnect!!!";
-                EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.MESSAGE_DIS, false));
+                EventBus.getDefault().post(new MainEvent(s, false));
             }
 
 

@@ -2,6 +2,8 @@ package zj.test.scrapt.Stock;
 
 import java.math.BigDecimal;
 
+import zj.test.scrapt.R;
+
 /**
  * Created by Administrator on 2017/12/6.
  */
@@ -275,28 +277,33 @@ public class UserInfo {
         return this;
     }
 
-    public String toString() {
+    public String toPercent(String p) {
         String s;
-        if (sucRate != "") {
-            sucRate = Double.parseDouble(sucRate) * 100 + "";
-            BigDecimal bigG = new BigDecimal(sucRate).setScale(1, BigDecimal.ROUND_HALF_UP);
+        if (p != "") {
+            if (p.lastIndexOf("%") != -1)
+                p = p.substring(0, p.lastIndexOf("%"));
+            p = Double.parseDouble(p) * 100 + "";
+            BigDecimal bigG = new BigDecimal(p).setScale(1, BigDecimal.ROUND_HALF_UP);
             s = bigG.toString();
         } else {
             s = "";
         }
 
-        return s + "% " + "      " + this.profitRate + "         " + this.id + " : " + this.nickname + "\navg days: " +
-                this.avgDays + " avg gain: " + this.avgProfit + " tradingFreq: " + this.tradingFrequency + "\n" +
-                "" + tRank + "" +
-                mRise + "" +
-                wProfit + "" +
-                mRank + "" +
-                status + "" +
-                tProfit + "" +
-                tRise + "" +
-                wRise + "" +
-                mProfit + "" +
-                wRank;
+        return s;
+    }
+
+    public String toString() {
+        String s;
+        s = toPercent(sucRate);
+        String wp = toPercent(wProfit);
+        String tp = toPercent(tProfit);
+        String mp = toPercent(mProfit);
+
+        return (R.string.suc_rate) + s + "% " + R.string.total_profit_rate + this.profitRate + " " + R.string.id + this.id + " : " + this.nickname + "\n"
+                + R.string.avg_days + this.avgDays + " " + R.string.avg_profit + this.avgProfit + " " + R.string.trade_freq + this.tradingFrequency + "\n" +
+                R.string.t_rank + tRank + " " + R.string.t_rise + tRise + " " + R.string.t_profit + tp + "% \n" +
+                R.string.m_rank + mRank + " " + R.string.m_rise + mRise + " " + R.string.m_profit + mp + "% \n" +
+                R.string.w_rank + wRank + " " + R.string.w_rise + wRise + " " + R.string.w_profit + wp + "% \n";
 
     }
 
