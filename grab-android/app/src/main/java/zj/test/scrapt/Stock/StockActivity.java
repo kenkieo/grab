@@ -36,15 +36,15 @@ public class StockActivity extends Activity {
                 g.getAttUsers();
                 List<UserInfo> sa = g.getListUser();
                 for (UserInfo a : sa) {
-                    g.getAttUserInfo(a.getId() + "");
-                    g.getAttUserInfo2(a.getId() + "");
-                    g.getAttUserInfo3(a.getId() + "");
+                    g.getAttUserInfo(a.id + "");
+                    g.getAttUserInfo2(a.id + "");
+                    g.getAttUserInfo3(a.id + "");
 //                }
 //                sa = g.getListUser();
 //                for (UserInfo a : sa) {
                     EventBus.getDefault().post(new StockEvent("---------------------------------------------------------------------", false));
                     EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
-                    s = g.getUserTrade(a.getId() + "");
+                    s = g.getUserTrade(a.id + "");
                     EventBus.getDefault().post(new StockEvent(s, false));
 //                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------------------", false));
                 }
@@ -65,42 +65,42 @@ public class StockActivity extends Activity {
         String GREEN_COLOR = "<font color=\'#00ff00\'>";
         String COLOR_START = RED_COLOR;
         String COLOR_END = "</font>";
-        s = uinfo.toPercent(uinfo.getSucRate());
-        String wp = uinfo.toPercent(uinfo.getwProfit());
-        String tp = uinfo.toPercent(uinfo.gettProfit());
-        String mp = uinfo.toPercent(uinfo.getmProfit());
+        s = uinfo.toPercent(uinfo.sucRate);
+//        String wp = uinfo.toPercent(uinfo.wProfit);
+//        String tp = uinfo.toPercent(uinfo.tProfit);
+//        String mp = uinfo.toPercent(uinfo.mProfit);
         StringBuilder a = new StringBuilder();
-        a.append(getResources().getString(R.string.id) + uinfo.getId() + " : " + uinfo.getNickname() + "<br>");
+        a.append(getResources().getString(R.string.id) + uinfo.id + " : " + uinfo.nickname + "<br>");
         if (s.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
         a.append(getResources().getString(R.string.suc_rate) + COLOR_START + s + "% " + COLOR_END);
-        if (uinfo.getProfitRate().indexOf("-") == -1) COLOR_START = RED_COLOR;
-        else COLOR_START = BLUE_COLOR;
-        a.append(getResources().getString(R.string.total_profit_rate) + COLOR_START + uinfo.getProfitRate() + COLOR_END + "<br>");
-        a.append(getResources().getString(R.string.avg_days) + uinfo.getAvgDays() + " ");
-        a.append(getResources().getString(R.string.avg_profit) + uinfo.getAvgProfit() + " ");
-        a.append(getResources().getString(R.string.trade_freq) + uinfo.getTradingFrequency() + "<br>");
+
         a.append(getResources().getString(R.string.t_rank) + uinfo.gettRank() + " ");
-        if (uinfo.gettRise().indexOf("-") == -1) COLOR_START = RED_COLOR;
+        if (uinfo.tRise.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
-        a.append(getResources().getString(R.string.t_rise) + COLOR_START + uinfo.gettRise() + COLOR_END + " ");
-        if (tp.indexOf("-") == -1) COLOR_START = RED_COLOR;
+        a.append(getResources().getString(R.string.t_rise) + COLOR_START + uinfo.tRise + COLOR_END + " ");
+        if (uinfo.tProfit.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
-        a.append(getResources().getString(R.string.t_profit) + COLOR_START + tp + "%" + COLOR_END + " <br>");
-        a.append(getResources().getString(R.string.m_rank) + uinfo.getmRank() + " ");
-        if (uinfo.getmRise().indexOf("-") == -1) COLOR_START = RED_COLOR;
+        a.append(getResources().getString(R.string.t_profit) + COLOR_START + uinfo.tProfit + COLOR_END + " <br>");
+        if (uinfo.mProfit.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
-        a.append(getResources().getString(R.string.m_rise) + COLOR_START + uinfo.getmRise() + COLOR_END + " ");
-        if (mp.indexOf("-") == -1) COLOR_START = RED_COLOR;
+        a.append(getResources().getString(R.string.m_profit) + COLOR_START + uinfo.mProfit + COLOR_END);
+        a.append(" " + getResources().getString(R.string.m_rank) + " " + uinfo.mRank + " ");
+        if (uinfo.mRise.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
-        a.append(getResources().getString(R.string.m_profit) + COLOR_START + mp + "%" + COLOR_END + " <br>");
-        a.append(getResources().getString(R.string.w_rank) + uinfo.getwRank() + " ");
-        if (uinfo.getwRise().indexOf("-") == -1) COLOR_START = RED_COLOR;
+        a.append(getResources().getString(R.string.m_rise) + COLOR_START + uinfo.mRise + COLOR_END + " <br>");
+
+        if (uinfo.wProfit.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
-        a.append(getResources().getString(R.string.w_rise) + COLOR_START + uinfo.getwRise() + COLOR_END + " ");
-        if (wp.indexOf("-") == -1) COLOR_START = RED_COLOR;
+        a.append(getResources().getString(R.string.w_profit) + COLOR_START + uinfo.wProfit + COLOR_END);
+        a.append(" " + getResources().getString(R.string.w_rank) + " " + uinfo.wRank + " ");
+        if (uinfo.wRise.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
-        a.append(getResources().getString(R.string.w_profit) + COLOR_START + wp + "%" + COLOR_END + " <br>");
+        a.append(getResources().getString(R.string.w_rise) + COLOR_START + uinfo.wRise + COLOR_END + " <br>");
+
+        a.append(getResources().getString(R.string.avg_days) + uinfo.avgDays + " ");
+        a.append(getResources().getString(R.string.avg_profit) + uinfo.avgProfit + " ");
+        a.append(getResources().getString(R.string.trade_freq) + uinfo.tradingFrequency + "<br>");
         return a.toString();
     }
 

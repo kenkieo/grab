@@ -127,19 +127,19 @@ public class GrabYougu {
                 mUserInfo.setNickname(nickName);
                 mp.put(id + "", mUserInfo);
             }
-            String followList = getJsonArray(result, "followList");
-            jsonArray = new JSONArray(followList);
-            l = jsonArray.length();
+//            String followList = getJsonArray(result, "followList");
+//            jsonArray = new JSONArray(followList);
+//            l = jsonArray.length();
 
-            for (int i = 0; i < l; i++) {
-                String ja = jsonArray.get(i).toString();
-                JSONObject jsonObject2 = new JSONObject(ja);
-                String profitRate = jsonObject2.getString("profitRate");
-                int id = jsonObject2.getInt("uid");
-                UserInfo mUserInfo = (UserInfo) mp.get(id + "");
-                mUserInfo.setProfitRate(profitRate);
-                mp.put(id + "", mUserInfo);
-            }
+//            for (int i = 0; i < l; i++) {
+//                String ja = jsonArray.get(i).toString();
+//                JSONObject jsonObject2 = new JSONObject(ja);
+//                String profitRate = jsonObject2.getString("profitRate");
+//                int id = jsonObject2.getInt("uid");
+//                UserInfo mUserInfo = (UserInfo) mp.get(id + "");
+//                mUserInfo.setProfitRate(profitRate);
+//                mp.put(id + "", mUserInfo);
+//            }
 
 
         } catch (Exception e) {
@@ -214,7 +214,7 @@ public class GrabYougu {
         try {
             String resp = getUrlResponse(spec);
             String result = getJsonObject(resp, "result");
-            Log.i("ZTAG", mp.get(uid).getNickname());
+            Log.i("ZTAG", mp.get(uid).nickname);
             Log.i("ZTAG", "" + result);
             if (result == null) {
                 return s;
