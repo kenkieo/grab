@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="green">#00ff00</color>
+    <color name="abs__bright_foreground_disabled_holo_light">#ffb2b2b2</color>
 </resources>

@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import zj.test.scrapt.R;
 import zj.test.scrapt.Stock.StockActivity;
 import zj.test.scrapt.Wifi.WifiControl;
+import zj.zfenlly.gua.FloatWinService;
 
 public class MainActivity extends AppCompatActivity {
 
