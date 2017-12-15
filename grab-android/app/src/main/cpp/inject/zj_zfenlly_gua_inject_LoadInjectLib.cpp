@@ -15,10 +15,10 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
 #include "zj_zfenlly_gua_inject_LoadInjectLib.h"
 #include "hook_funciton.h"
 
-#include "substrate.h"
 
 #define ENABLE_DEBUG 0
 
@@ -150,8 +150,8 @@ AddInfo *getLibMemAddr(pid_t target_pid, const char *module_name) {
         goto fails;
     }
     printAddInfo(remote_handle);
-    DL_DEBUG("[+] get_remote_addr: local[0x%x], remote[0x%x]\n", (unsigned int) local_handle,
-             (unsigned int) remote_handle);
+    DL_DEBUG("[+] get_remote_addr: local[0x%x], remote[0x%x]\n", (unsigned long) local_handle,
+             (unsigned long) remote_handle);
     fails:
     return remote_handle;
 //    return (void *) ((uint32_t) local_addr + (uint32_t) remote_handle - (uint32_t) local_handle);
@@ -218,7 +218,7 @@ int injectLibFunc(pid_t target_pid, const char *soname, const char *symbol, void
 #define PAGE_START(addr) (~(getpagesize() - 1) & (addr))
 
 static int modifyMemAccess(void *addr, int prots) {
-    void *page_start_addr = (void *) PAGE_START((uint32_t) addr);
+    void *page_start_addr = (void *) PAGE_START((long) addr);
     return mprotect(page_start_addr, getpagesize(), prots);
 }
 
@@ -259,21 +259,10 @@ static int replaceFunc(void *addr, void *replace_func, void **old_func) {
 //#define R_ARM_ABS32 0x02
 //#define R_ARM_GLOB_DAT 0x15
 //#define R_ARM_JUMP_SLOT 0x16
-typedef int (*arc4random_fun)(void);
-
-arc4random_fun old_arc4random = NULL;
-
-int arc4random_hook() {
-
-    int t = old_arc4random();
-
-    DL_ERR("arc4random_hook   %d", t);
-    t = 851401618;
-    return t;
-}
 
 
-MSConfig(MSFilterLibrary, "libnative-lib.so");
+
+//MSConfig(MSFilterLibrary, "libnative-lib.so");
 
 
 
@@ -311,7 +300,7 @@ MSConfig(MSFilterLibrary, "libnative-lib.so");
 //        if (dvmload == NULL) {
 //            DL_DEBUG("error find dvmLoadNativeCode ");
 //        } else {
-//            MSHookFunction(dvmload, (void *) &lrand48_hook, (void **) &old_lrand48);
+//            MSHookFunction(dvmload, (void *) &arc4random_hook, (void **) &old_arc4random);
 //        }
 //    } else {
 //        DL_DEBUG("ERROR FIND LIBDVM");
@@ -339,11 +328,14 @@ Java_zj_zfenlly_gua_LoadInjectLib_injectLib(JNIEnv *env, jobject obj, jstring j_
 
     target_pid = find_pid_of(c_pkg_name);
 
+    if (target_pid == -1) {
+        DL_DEBUG("not found %s", c_pkg_name);
+        return NULL;
+    }
 
     size_t length = hook_libs.len;
 
-    DL_DEBUG("find  \"%d\" %d  entry %d  lib %d", target_pid, length, sizeof(Hook_Entry),
-             sizeof(Hook_Lib));
+    DL_DEBUG("find  pid: %d name: %s     %d ", target_pid, c_pkg_name, length);
     for (int j = 0; j < length; j++) {
         len = hook_libs.lib_entry[j]->funs_entry->len;
         for (i = 0; i < len; i++) {
@@ -397,7 +389,7 @@ int changeLibFuncAddr(AddInfo *addr, const char *symbol, void *replace_func,
         DL_DEBUG("[-] Could not find symbol %s", symbol);
         return -2;
     } else {
-        DL_DEBUG("[+] sym %x %x, symidx %d.", (int) sym, ((int) sym - (int) (elfInfo.elf_base)),
+        DL_DEBUG("[+] sym %x %x, symidx %d.", sym, ((long) sym - (long) (elfInfo.elf_base)),
                  symidx);
     }
 //    DL_DEBUG("+++++++++++%d", elfInfo.relpltsz);

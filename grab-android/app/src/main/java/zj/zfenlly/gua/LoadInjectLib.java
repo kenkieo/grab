@@ -8,11 +8,17 @@ import android.util.Log;
 
 public final class LoadInjectLib {
     static {
-        System.loadLibrary("inject");
+//        System.loadLibrary("dvm");
+//        System.loadLibrary("substrate-dvm");
+//        System.loadLibrary("substrate");
+        System.loadLibrary("inject.cy");
     }
 
-    public static void init() {
-        int i = injectLib("com.teamlava.castlestory");
+    public static void init(String pkg) {
+//        int i = injectLib("com.teamlava.castlestory");
+        int i = injectLib("zfenlly.zj.hook");
+
+//        int i = injectLib(pkg);
         Log.e("JTAG", "+" + i);
         Log.e("sTAG", "#     " + SystemTime.nanoTime());
     }

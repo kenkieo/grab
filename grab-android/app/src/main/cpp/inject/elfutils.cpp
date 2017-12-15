@@ -4,6 +4,8 @@
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <sys/user.h>
 #include "sys/exec_elf.h"
 
 #include "elfutils.h"
@@ -19,9 +21,8 @@ char *sname
                     e_shnum;
             i++) {
         const char *name = (const char *) (shdr[i].sh_name + info.shstr);
-        if (!
-                strncmp(name, sname, strlen(sname)
-                )) {
+        if (!strncmp(name, sname, strlen(sname)
+        )) {
             target = (Elf32_Shdr *) (shdr + i);
             break;
         }
@@ -36,6 +37,7 @@ static inline Elf32_Phdr *findSegmentByType(ElfInfo &info, const Elf32_Word type
     Elf32_Phdr *phdr = info.phdr;
 
     for (int i = 0; i < info.ehdr->e_phnum; i++) {
+
         if (phdr[i].p_type == type) {
             target = phdr + i;
             break;
@@ -69,8 +71,6 @@ static void
 getSegmentInfo(ElfInfo &info, const Elf32_Word type, Elf32_Phdr **ppPhdr, Elf32_Word *pSize,
                T *data) {
     Elf32_Phdr *_phdr = findSegmentByType(info, type);
-
-
     if (_phdr) {
 //        if (info.handle->fromfile) { //文件读取
 //            SAFE_SET_VALUE(data, reinterpret_cast<T>(info.elf_base + _phdr->p_offset));
@@ -79,12 +79,10 @@ getSegmentInfo(ElfInfo &info, const Elf32_Word type, Elf32_Phdr **ppPhdr, Elf32_
         SAFE_SET_VALUE(data, reinterpret_cast<T>(info.elf_base + _phdr->p_vaddr));
         SAFE_SET_VALUE(pSize, _phdr->p_memsz);
 //        }
-
     } else {
         DL_DEBUG("[-] Could not found segment type is %d\n", type);
         exit(-1);
     }
-
     SAFE_SET_VALUE(ppPhdr, _phdr);
 }
 
@@ -106,6 +104,10 @@ void getElfInfoByHeader(ElfInfo &info, const ElfHandle *handle) {
     info.elf_base = (uint8_t *) handle->base;
 //    DL_DEBUG("-----------------");
 //    printWordHex(info.elf_base);
+    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.elf_base);
+    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_shoff);
+    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_phoff);
+
     info.ehdr = reinterpret_cast<Elf32_Ehdr *>(info.elf_base);
     info.shdr = reinterpret_cast<Elf32_Shdr *>(info.elf_base + info.ehdr->e_shoff);
     info.phdr = reinterpret_cast<Elf32_Phdr *>(info.elf_base + info.ehdr->e_phoff);
@@ -149,7 +151,7 @@ void getElfInfoBySectionView(ElfInfo &info, const ElfHandle *handle) {
 #define PAGE_END(x)    PAGE_START((x) + (PAGE_SIZE-1))
 
 void printWordHex2(__uint32_t *addr) {
-    DL_DEBUG("0x%x: 0x%08X(   %02X %02X %02X %02X)", (int) addr, *addr, *(uint8_t *) addr,
+    DL_DEBUG("0x%x: 0x%08X(   %02X %02X %02X %02X)", addr, *addr, *(uint8_t *) addr,
              *((uint8_t *) addr + 1), *((uint8_t *) addr + 2), *((uint8_t *) addr + 3));
 }
 
@@ -159,11 +161,12 @@ void printPTLoad(ElfInfo &info) {
     for (int i = 0; i < info.ehdr->e_phnum; i++) {
         if (phdr[i].p_type == PT_LOAD) {
             DL_DEBUG("file: [0x%x 0x%x] ====> mem: 0x%x  *  [0x%x 0x%x]  0  0x%x",
-                     (unsigned int)phdr[i].p_offset, (unsigned int)(phdr[i].p_offset + phdr[i].p_filesz),
-                     (unsigned int)(info.elf_base + PAGE_START(phdr[i].p_vaddr)),
-                     (unsigned int)(info.elf_base + phdr[i].p_vaddr),
-                     (unsigned int)(info.elf_base + phdr[i].p_vaddr + phdr[i].p_filesz),
-                     (unsigned int)(info.elf_base + PAGE_END(phdr[i].p_vaddr + phdr[i].p_filesz)));
+                     (unsigned int) phdr[i].p_offset,
+                     (unsigned int) (phdr[i].p_offset + phdr[i].p_filesz),
+                     (info.elf_base + PAGE_START(phdr[i].p_vaddr)),
+                     (info.elf_base + phdr[i].p_vaddr),
+                     (info.elf_base + phdr[i].p_vaddr + phdr[i].p_filesz),
+                     (info.elf_base + PAGE_END(phdr[i].p_vaddr + phdr[i].p_filesz)));
 //            printWordHex2((u_int32_t *) (info.elf_base + phdr[i].p_vaddr));
         }
     }
@@ -178,7 +181,7 @@ void getElfInfoBySegmentView(ElfInfo &info, const ElfHandle *handle) {
     Elf32_Phdr *dynamic = NULL;
     Elf32_Word size = 0;
 
-    printPTLoad(info);
+    //printPTLoad(info);
 
 
     getSegmentInfo(info, PT_DYNAMIC, &dynamic, &size, &info.dyn);
@@ -186,13 +189,13 @@ void getElfInfoBySegmentView(ElfInfo &info, const ElfHandle *handle) {
         DL_DEBUG("[-] could't find PT_DYNAMIC segment");
         exit(-1);
     }
-//    DL_DEBUG("PT_DYNAMIC(%d) type ===== 0x%x", type, (int) _phdr - (int) (info.elf_base));
+
 
     info.dynsz = size / sizeof(Elf32_Dyn);
 
     Elf32_Dyn *dyn = info.dyn;
     DL_DEBUG("======[0x%x]0x%x %d %d 0x%x %d", dynamic->p_offset, dynamic->p_vaddr,
-             dynamic->p_memsz, size, (unsigned int)info.dyn, info.dynsz);
+             dynamic->p_memsz, size, info.dyn, info.dynsz);
     //======0x1cbb0 304 304 0xa3101bb0 38
     for (int i = 0; i < info.dynsz; i++, dyn++) {
 //        DL_DEBUG("----  0x%x:    0x%x", (unsigned int)dyn, dyn->d_tag);

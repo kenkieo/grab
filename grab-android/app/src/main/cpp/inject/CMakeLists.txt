@@ -9,7 +9,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 # You can define multiple libraries, and CMake builds it for you.
 # Gradle automatically packages shared libraries with your APK.
 
-add_library(inject
+add_library(inject.cy
             SHARED
             zj_zfenlly_gua_inject_LoadInjectLib.cpp
             elfutils.cpp
@@ -17,13 +17,31 @@ add_library(inject
 )
 #set(distribution_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../distribution)
 
-target_link_libraries(inject
+target_link_libraries(inject.cy
         log
-        substrate
-        substrate-dvm
+
+
 )
-
-
+#        substrate
+#         substrate-dvm
+add_library(substrate
+            SHARED
+            IMPORTED
+)
+set_target_properties(
+        substrate
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libsubstrate.so
+)
+add_library(substrate-dvm
+            SHARED
+            IMPORTED
+)
+set_target_properties(
+        substrate-dvm
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libsubstrate-dvm.so
+)
 
 #target_link_libraries(inject
 #        log

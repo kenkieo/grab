@@ -27,6 +27,7 @@ import zj.test.scrapt.R;
 import zj.test.scrapt.Stock.StockActivity;
 import zj.test.scrapt.Wifi.WifiControl;
 import zj.zfenlly.gua.FloatWinService;
+import zj.zfenlly.gua.LoadInjectLib;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -214,18 +215,20 @@ public class MainActivity extends AppCompatActivity {
         uc_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String spec = "https://weibo.cn/u/1772392290";
-                OpenWebView.open(MainActivity.this, spec);
+//                String spec = "https://weibo.cn/u/1772392290";
+//                OpenWebView.open(MainActivity.this, spec);
+                LoadInjectLib.init(getApplication().getPackageName());
             }
         });
 
         stock_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                //指定intent要启动的类
-                intent.setClass(MainActivity.this, StockActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent();
+//                //指定intent要启动的类
+//                intent.setClass(MainActivity.this, StockActivity.class);
+//                startActivity(intent);
+                tv.setText(stringFromJNI());
             }
         });
 

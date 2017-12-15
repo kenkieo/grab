@@ -75,15 +75,19 @@ int gettimeofday_hook(struct timeval *tv, struct timezone *tz) {
 Hook_Entry hook_entry11 = {"clock_gettime",
                            (void *) clock_gettime_hook,
                            (void **) &old_clock_gettime};
+
 Hook_Entry hook_entry12 = {"gettimeofday",
                            (void *) gettimeofday_hook,
                            (void **) &old_gettimeofday};
+
 Hook_Entry hook_entry13 = {"time",
                            (void *) time_hook,
                            (void **) &old_time};
+
 Hook_Entry hook_entry14 = {"arc4random",
                            (void *) lrand48_hook,
                            (void **) &old_lrand48};
+
 Hook_Entry *hook_entries1[] = {/*&hook_entry11,*/
         &hook_entry12,
         &hook_entry13,
@@ -98,7 +102,33 @@ Hook_Lib hook_lib1 = {
         "libs3e_android.so",
         &hook_fun1
 };
+/////////////////////////////////////////////////////////////
+typedef int (*arc4random_fun)(void);
 
+arc4random_fun old_arc4random = NULL;
+
+int arc4random_hook() {
+
+    int t = old_arc4random();
+
+    DL_ERR("arc4random_hook   %d", t);
+    t = 851401618;
+    return t;
+}
+Hook_Entry hook_entrya1 = {"arc4random",
+                           (void *) arc4random_hook,
+                           (void **) &old_arc4random};
+Hook_Entry *hook_entries3[] = {/*&hook_entry11,*/
+        &hook_entrya1,
+};
+Hook_Funs hook_fun3 = {
+        1,//
+        hook_entries3
+};
+Hook_Lib hook_lib3 = {
+        "libnative-lib.so",
+        &hook_fun3
+};
 /////////////////////////////////////////////////////////////
 Hook_Entry hook_entry21 = {"clock_gettime",
                            (void *) clock_gettime_hook,
@@ -121,7 +151,16 @@ Hook_Lib *hook_entries[] = {
         &hook_lib2
 };
 
-Hook_Libs hook_libs = {
-        0,
+Hook_Libs hook_libs2 = {
+        2,
         hook_entries
+};
+
+Hook_Lib *hook_entriesa[] = {
+        &hook_lib3
+};
+
+Hook_Libs hook_libs = {
+        1,//2
+        hook_entriesa
 };

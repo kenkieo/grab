@@ -1,6 +1,7 @@
 #include <jni.h>
-#include <string>
+
 #include <stdlib.h>
+#include <string.h>
 
 extern "C"
 JNIEXPORT jstring
@@ -8,7 +9,6 @@ JNIEXPORT jstring
 JNICALL Java_zj_test_scrapt_Tweet_MainActivity_stringFromJNI(
         JNIEnv *env,
         jobject /* this */) {
-    std::string hello = "Hello from C++";
     int a = lrand48();
     char str[32];
 

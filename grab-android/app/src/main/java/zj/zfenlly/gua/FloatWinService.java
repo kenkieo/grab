@@ -106,7 +106,7 @@ public class FloatWinService extends Service {
         // TODO Auto-generated method stub
         super.onCreate();
 
-        LoadInjectLib.init();
+        LoadInjectLib.init(getPackageName());
 
         mWifiAdmin = new WifiAdmin(this);
         ns.init(this);

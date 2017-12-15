@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import zj.test.scrapt.R;
+import zj.zfenlly.gua.LoadInjectLib;
 
 import static zj.test.scrapt.Stock.StockEvent.EventType.COLOR_DIS;
 
@@ -111,6 +112,7 @@ public class StockActivity extends Activity {
 //        lv = findViewById(R.id.list_stock);
         tvs = findViewById(R.id.tv_stock);
         tvs.setMovementMethod(ScrollingMovementMethod.getInstance());
+
         new Thread(runnable).start();
 
 //        test();
