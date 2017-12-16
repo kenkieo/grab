@@ -62,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 s = a.login(uid, pwd);
                 EventBus.getDefault().post(new MainEvent(s, false));
 //            Log.e("ZTAG", "GrabTweet" + a.login_bak());
-//                String proxy = Settings.Secure.getString((MainActivity.this).getContentResolver(), Settings.Secure.HTTP_PROXY);
-//                s = a.getTweetInfo(uid);
-//                s += proxy + "\n";
+
                 s = a.getUserInfo("3373931552");
                 EventBus.getDefault().post(new MainEvent(s, false));
 //                s += a.getUserInfo("1789247505");
@@ -215,20 +213,20 @@ public class MainActivity extends AppCompatActivity {
         uc_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String spec = "https://weibo.cn/u/1772392290";
-//                OpenWebView.open(MainActivity.this, spec);
-                LoadInjectLib.init(getApplication().getPackageName());
+                String spec = "https://weibo.cn/u/1772392290";
+                OpenWebView.open(MainActivity.this, spec);
+//                LoadInjectLib.init(getApplication().getPackageName());
             }
         });
 
         stock_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent();
+                Intent intent = new Intent();
 //                //指定intent要启动的类
-//                intent.setClass(MainActivity.this, StockActivity.class);
-//                startActivity(intent);
-                tv.setText(stringFromJNI());
+                intent.setClass(MainActivity.this, StockActivity.class);
+                startActivity(intent);
+//                tv.setText(stringFromJNI());
             }
         });
 

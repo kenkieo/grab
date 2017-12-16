@@ -150,8 +150,8 @@ AddInfo *getLibMemAddr(pid_t target_pid, const char *module_name) {
         goto fails;
     }
     printAddInfo(remote_handle);
-    DL_DEBUG("[+] get_remote_addr: local[0x%x], remote[0x%x]\n", (unsigned long) local_handle,
-             (unsigned long) remote_handle);
+    DL_DEBUG("[+] get_remote_addr: local[0x%x], remote[0x%x]\n", (unsigned int) local_handle,
+             (unsigned int) remote_handle);
     fails:
     return remote_handle;
 //    return (void *) ((uint32_t) local_addr + (uint32_t) remote_handle - (uint32_t) local_handle);
@@ -218,7 +218,7 @@ int injectLibFunc(pid_t target_pid, const char *soname, const char *symbol, void
 #define PAGE_START(addr) (~(getpagesize() - 1) & (addr))
 
 static int modifyMemAccess(void *addr, int prots) {
-    void *page_start_addr = (void *) PAGE_START((long) addr);
+    void *page_start_addr = (void *) PAGE_START((uint32_t) addr);
     return mprotect(page_start_addr, getpagesize(), prots);
 }
 
@@ -389,7 +389,7 @@ int changeLibFuncAddr(AddInfo *addr, const char *symbol, void *replace_func,
         DL_DEBUG("[-] Could not find symbol %s", symbol);
         return -2;
     } else {
-        DL_DEBUG("[+] sym %x %x, symidx %d.", sym, ((long) sym - (long) (elfInfo.elf_base)),
+        DL_DEBUG("[+] sym %x %x, symidx %d.", (int) sym, ((int) sym - (int) (elfInfo.elf_base)),
                  symidx);
     }
 //    DL_DEBUG("+++++++++++%d", elfInfo.relpltsz);

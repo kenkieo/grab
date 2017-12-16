@@ -3,7 +3,6 @@ package zj.test.scrapt.Tweet;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
@@ -62,8 +61,9 @@ public class GrabTweet {
 //                    cookie = mCookiesStore.parseCookie(cookie.toString());
 //                    Log.e("ZTAGA", "A:" + cookie.toString());
                 }
-                Log.e("ZTAG", "saveFromResponse:" + url.toString());
+                Log.e("ZTAG", "saveFromResponse:is" + url.toString());
             }
+            Log.e("ZTAG", "saveFromResponse:" + url.toString());
 //            for (int i = 0; i < cookies.size(); i++) {
 //                c = cookies.get(i);
 //                Log.e("ZTAG", "saveFromResponse:" + c.toString());
@@ -313,38 +313,48 @@ public class GrabTweet {
         }
         mCookiesStore.clear();
         try {
-            String data = "username=" + URLEncoder.encode(userName, "UTF-8")
-                    + "&password=" + URLEncoder.encode(userPwd, "UTF-8")
-                    + "&savestate=1&r=&ec=0&pagerefer=&entry=mweibo&wentry=&loginfrom=&client_id=&code=&qq=&mainpageflag=1&hff=&hfp=";
+//            String data = "username=" + URLEncoder.encode(userName, "UTF-8")
+//                    + "&password=" + URLEncoder.encode(userPwd, "UTF-8")
+//                    + "&savestate=1&r=&ec=0&pagerefer=&entry=mweibo&wentry=&loginfrom=&client_id=&code=&qq=&mainpageflag=1&hff=&hfp=";
             RequestBody formBody = new FormBody.Builder()
                     .add("username", userName)
                     .add("password", userPwd)
                     .add("savestate", "1")
                     .add("mainpageflag", "1")
-                    .add("ec", "Jurassic Park")
+                    .add("ec", "0")
                     .add("pagerefer", "")
                     .add("entry", "mweibo")
+                    .add("r", "")
+                    .add("wentry", "")
+                    .add("loginfrom", "")
+                    .add("client_id", "")
+                    .add("code", "")
+                    .add("qq", "")
+                    .add("hff", "")
+                    .add("hfp", "")
                     .build();
+            Log.e("ZTAG", "" + formBody.contentLength());
 
             Request request = new Request.Builder()
                     .header("Accept", "*/*")
                     .addHeader("User-Agent", "Mozilla/5.0 (compatible;MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)")
-                    .addHeader("Referer", "https://passport.weibo.cn/signin/login_bak")
+                    .addHeader("Referer", "https://passport.weibo.cn/signin/login")
                     .addHeader("Accept-Encoding", "gzip,deflate")
                     .addHeader("Accept-Language", "zh-cn")
                     .addHeader("Connection", "keep-alive")
-                    .addHeader("Content-Length", String.valueOf(data.getBytes().length))
+                    .addHeader("Content-Length", "" + formBody.contentLength())
                     .addHeader("Content-Type", "application/x-www-form-urlencoded")
                     .addHeader("Host", "passport.weibo.cn")
+//                    .addHeader("Cache-Control", "no-cache")
                     .url("https://passport.weibo.cn/sso/login")
                     .post(formBody)
                     .build();
 //            Log.e("ZTAG", "==============data: " + data);
-            Log.e("ZTAG", "request success: " + request.headers());
+//            Log.e("ZTAG", "request success: " + request.headers());
             Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
             s = response.code() + "";
-
+            Log.e("ZTAG", "response success: " + response.message());
 //            s = "get cookies";
             ShareP.setUidToPref(mContext, userName);
             ShareP.setPwdToPref(mContext, userPwd);

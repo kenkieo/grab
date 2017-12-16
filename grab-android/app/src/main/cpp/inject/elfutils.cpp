@@ -105,8 +105,8 @@ void getElfInfoByHeader(ElfInfo &info, const ElfHandle *handle) {
 //    DL_DEBUG("-----------------");
 //    printWordHex(info.elf_base);
     DL_DEBUG("getElfInfoByHeader() type ===== %d", info.elf_base);
-    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_shoff);
-    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_phoff);
+//    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_shoff);
+//    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_phoff);
 
     info.ehdr = reinterpret_cast<Elf32_Ehdr *>(info.elf_base);
     info.shdr = reinterpret_cast<Elf32_Shdr *>(info.elf_base + info.ehdr->e_shoff);

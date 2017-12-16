@@ -69,27 +69,27 @@ class Weibo:
     def login(self):
         s = requests.Session()
 
-        r = s.get('https://passport.weibo.cn/signin/login')
+        #r = s.get('https://passport.weibo.cn/signin/login')
 
         # r = s.get('https://passport.weibo.cn/sso/login')
         # r = s.get("http://httpbin.org/cookies")
-        print (r.status_code)
+        #print (r.status_code)
         # with open("code.html", "wb") as code:
         # code.write(r.content)
         payload = {
             'username': self.username,
             'password': self.password,
             'savestate': '1',
-            'r': '',
+            'mainpageflag': '1',
             'ec': '0',
             'pagerefer': '',
             'entry': 'mweibo',
+            'r': '',
             'wentry': '',
             'loginfrom': '',
             'client_id': '',
             'code': '',
             'qq': '',
-            'mainpageflag': '1',
             'hff': '',
             'hfp': '',
         }
@@ -97,12 +97,13 @@ class Weibo:
             'Accept': '*/*',
             'User-Agent': 'Mozilla/5.0 (compatible;MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
             'Referer': 'https://passport.weibo.cn/signin/login',
-            'Accept - Encoding': 'gzip,deflate,br',
+            'Accept - Encoding': 'gzip,deflate',
             'Accept-Language': 'zh-cn',
             'Connection': 'keep-alive',
-            'Content-Length': '154',
+            'Content-Length': str(len(payload)),
             'Content-Type': 'application/x-www-form-urlencoded',
             'Host': 'passport.weibo.cn',
+            'Cache-Control':'no-cache',
         }
         r = requests.post("https://passport.weibo.cn/sso/login", data=payload, headers=headers)
         # print(r.history)
@@ -114,6 +115,7 @@ class Weibo:
         else:
             print 'login error!!!'
         self.cookies = r.cookies
+        print r.cookies
         return r.cookies
 
     def getUrl(self, url):
@@ -549,12 +551,14 @@ if __name__ == "__main__":
     # a.getUserInfo(uid)
     #
     # return
-    a.getTweetHtml(uid)
-    a.getFollowHtml(uid)
-    a.getAtUserHtml(uid)
-    a.parseTweet(uid)
-    a.parseFollow(uid)
-    a.parseAtUser(uid)
+
+
+    # a.getTweetHtml(uid)
+    # a.getFollowHtml(uid)
+    # a.getAtUserHtml(uid)
+    # a.parseTweet(uid)
+    # a.parseFollow(uid)
+    # a.parseAtUser(uid)
 
 if __name__ == "__main2__":
     yougu.getfollow()

@@ -19,8 +19,8 @@ public class OpenWebView {
         intent.setData(content_url);
         mContext.startActivity(intent);
 
-        Zlog.trace();
-
-        Zlog.debug();
+//        Zlog.trace();
+//
+//        Zlog.debug();
     }
 }
