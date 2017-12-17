@@ -541,6 +541,7 @@ class Weibo:
 
 
 ########################################################
+
 if __name__ == "__main__":
     uid = '1772392290'
     # uid = '3373931552'
@@ -553,13 +554,6 @@ if __name__ == "__main__":
     # return
 
 
-    # a.getTweetHtml(uid)
-    # a.getFollowHtml(uid)
-    # a.getAtUserHtml(uid)
-    # a.parseTweet(uid)
-    # a.parseFollow(uid)
-    # a.parseAtUser(uid)
-
-if __name__ == "__main2__":
+if __name__ == "__main1__":
     yougu.getfollow()
     print 'end'
