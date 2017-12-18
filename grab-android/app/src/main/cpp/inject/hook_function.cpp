@@ -151,7 +151,7 @@ Hook_Lib *hook_entries[] = {
         &hook_lib2
 };
 
-Hook_Libs hook_libs2 = {
+Hook_Libs hook_libs = {
         2,
         hook_entries
 };
@@ -160,7 +160,7 @@ Hook_Lib *hook_entriesa[] = {
         &hook_lib3
 };
 
-Hook_Libs hook_libs = {
+Hook_Libs hook_libs2 = {
         1,//2
         hook_entriesa
 };

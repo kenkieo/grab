@@ -11,7 +11,7 @@ public final class LoadInjectLib {
 //        System.loadLibrary("dvm");
 //        System.loadLibrary("substrate-dvm");
 //        System.loadLibrary("substrate");
-        System.loadLibrary("inject.cy");
+        System.loadLibrary("inject");
     }
 
     public static void init(String pkg) {
