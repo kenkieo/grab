@@ -47,11 +47,21 @@ public class MainActivity extends AppCompatActivity {
     Button login_btn = null;
     Button uc_btn = null;
     Button stock_btn = null;
+    Button ball_btn =null;
     Button record_btn = null;
 
 
     String uid;
     String pwd;
+    Runnable ballRunnable = new Runnable(){
+        @Override
+        public void run() {
+            String s = "         ";
+            EventBus.getDefault().post(new MainEvent(s, true));
+
+            EventBus.getDefault().post(new MainEvent(""+stringFromJNI(), false));
+        }
+    };
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -178,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         login_btn = findViewById(R.id.login);
         uc_btn = findViewById(R.id.uc);
         stock_btn = findViewById(R.id.stock);
+        ball_btn=findViewById(R.id.genDoubleBall);
 //        login_btn.setVisibility(View.INVISIBLE);
 
         uidedt = findViewById(R.id.uid_et);
@@ -194,6 +205,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new Thread(runnable).start();
+            }
+        });
+
+        ball_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Thread(ballRunnable).start();
             }
         });
 
@@ -238,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
-
+    public native int intFromJNI();
     @Override
     public void onStart() {
         super.onStart();
