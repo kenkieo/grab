@@ -3,7 +3,8 @@
 //
 #include "hook_funciton.h"
 #include "elfutils.h"
-
+#include<sys/types.h>
+#include<dirent.h>
 
 volatile int miniteFlag = 0;
 
@@ -24,6 +25,16 @@ time_fun old_time = NULL;
 
 typedef int (*lrand48_fun)(void);
 lrand48_fun old_lrand48 = NULL;
+
+DIR* opendir (const char * path );
+typedef DIR* (*opendir_fun)(const char * path);
+opendir_fun old_opendir = NULL;
+
+DIR* opendir_hook(const char * path) {
+    DIR* t = old_opendir(path);
+    DL_ERR("opendir_hook   %s", path);
+    return t;
+}
 
 
 time_t time_hook(time_t *timer) {
@@ -88,10 +99,14 @@ Hook_Entry hook_entry14 = {"arc4random",
                            (void *) lrand48_hook,
                            (void **) &old_lrand48};
 
+Hook_Entry hook_entry15 = {"opendir",
+                           (void *) opendir_hook,
+                           (void **) &old_opendir};
+
 Hook_Entry *hook_entries1[] = {/*&hook_entry11,*/
         &hook_entry12,
         &hook_entry13,
-        &hook_entry14
+        &hook_entry15
 };
 
 Hook_Funs hook_fun1 = {

@@ -553,6 +553,12 @@ if __name__ == "__main__":
     #
     # return
 
+    a.getTweetHtml(uid)
+    a.getFollowHtml(uid)
+    a.getAtUserHtml(uid)
+    a.parseTweet(uid)
+    a.parseFollow(uid)
+    a.parseAtUser(uid)
 
 if __name__ == "__main1__":
     yougu.getfollow()

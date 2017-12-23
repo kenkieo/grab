@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import zj.test.scrapt.Utils.Zlog;
+import zj.zfenlly.Utils.Zlog;
 
 /**
  * Created by Administrator on 2017/11/10.
@@ -21,6 +21,6 @@ public class OpenWebView {
 
 //        Zlog.trace();
 //
-//        Zlog.debug();
+        Zlog.debug();
     }
 }

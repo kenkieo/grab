@@ -1,6 +1,8 @@
-package zj.test.scrapt.Utils;
+package zj.zfenlly.Utils;
 
 import android.util.Log;
+
+import java.io.File;
 
 /**
  * Created by Administrator on 2017/12/1.
@@ -29,11 +31,15 @@ public class Zlog {
         Log.w("ztag", "" + str);
     }
 
-    public static void debug(){
+    public static void dFile2String(File file) {
+        Log.d("ztag", "file:" + file.toString());
+    }
+
+    public static void debug() {
         e("debug");
     }
 
-    public static void trace(){
+    public static void trace() {
         Exception e = new Exception("this is a log");
         e.printStackTrace();
     }
