@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 
-extern "C"
+extern "C" {
 JNIEXPORT jstring JNICALL
 Java_zj_test_scrapt_Tweet_MainActivity_stringFromJNI(JNIEnv *env, jobject /* this */) {
 
@@ -19,12 +19,13 @@ Java_zj_test_scrapt_Tweet_MainActivity_stringFromJNI(JNIEnv *env, jobject /* thi
     return env->NewStringUTF(str);
 }
 
-JNIEXPORT int JNICALL
-Java_zj_test_scrapt_Tweet_MainActivity_intFromJNI(JNIEnv *env, jobject /* this */) {
+JNIEXPORT jlong JNICALL
+Java_zj_test_scrapt_Tweet_MainActivity_longFromJNI(JNIEnv *env, jobject /* this */) {
 
     srand48((unsigned long) time(NULL));
-    int a = lrand48();
+    long a = lrand48();
 
     return a;
 }
 
+}

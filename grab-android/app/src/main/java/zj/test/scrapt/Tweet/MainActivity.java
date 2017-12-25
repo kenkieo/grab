@@ -23,11 +23,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import zj.test.scrapt.R;
 import zj.test.scrapt.Stock.StockActivity;
 import zj.test.scrapt.Wifi.WifiControl;
-import zj.zfenlly.gua.FloatWinService;
-import zj.zfenlly.gua.LoadInjectLib;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,19 +49,20 @@ public class MainActivity extends AppCompatActivity {
     Button login_btn = null;
     Button uc_btn = null;
     Button stock_btn = null;
-    Button ball_btn =null;
+    Button ball_btn = null;
     Button record_btn = null;
 
 
     String uid;
     String pwd;
-    Runnable ballRunnable = new Runnable(){
+    Runnable ballRunnable = new Runnable() {
         @Override
         public void run() {
             String s = "         ";
             EventBus.getDefault().post(new MainEvent(s, true));
 
-            EventBus.getDefault().post(new MainEvent(""+stringFromJNI(), false));
+
+            EventBus.getDefault().post(new MainEvent("" + random(6, 1, 34), false));
         }
     };
     Runnable runnable = new Runnable() {
@@ -87,6 +90,88 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+
+    public String random(int num, int minValue, int maxValue) {
+        if (num > maxValue) {
+            num = maxValue;
+        }
+        if (num < 0 || maxValue < 0) {
+            throw new RuntimeException("num or maxValue must be greater than zero");
+        }
+        List<Integer> result = new ArrayList<Integer>(num);
+        String a = "";
+        String b = "";
+
+
+        int len = maxValue - minValue;
+        int[] tmpArray = new int[len];
+        int[] tmp2Array = new int[num];
+
+        for (int i = 0; i < len; i++) {
+            tmpArray[i] = i + minValue;
+
+        }
+        for (int i = 0; i < num; i++) {
+            tmp2Array[i] = 0;
+        }
+
+        Random random = new Random();
+        b = "" + (random.nextInt(16) + 1);
+        for (int i = 0; i < num; i++) {
+            int index = random.nextInt(len - i);
+            int tmpValue = tmpArray[index];
+            tmp2Array[i] = tmpValue;
+            result.add(tmpValue);
+            int lastIndex = len - i - 1;
+            if (index == lastIndex) {
+                continue;
+            } else {
+                tmpArray[index] = tmpArray[lastIndex];
+            }
+        }
+
+        for (int i = 0; i < num; i++) {
+            for (int j = i + 1; j < num; j++) {
+                if (tmp2Array[i] > tmp2Array[j]) {
+                    int z = tmp2Array[j];
+                    tmp2Array[j] = tmp2Array[i];
+                    tmp2Array[i] = z;
+                }
+            }
+            a += tmp2Array[i] + " ";
+
+        }
+
+        a += " : " + b;
+        return a;
+    }
+
+    private String getNumsFromRange(int n, int start, int end) {
+        String a = "";
+        long[] l = new long[n];
+        boolean flag = false;
+
+        for (int i = 0; i < n; i++) {
+            int d = (int) (longFromJNI() % (end - start)) + start;
+            flag = false;
+            for (int j = 0; j < i; j++) {
+                if (d == l[j]) {
+                    flag = true;
+                }
+            }
+            if (flag) {
+                i--;
+            } else {
+                l[i] = d;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            a += l[i] + " ";
+        }
+
+        return a;
+    }
 
     boolean checkForReady() {
         boolean isconnect = WifiControl.isConnect(MainActivity.this);
@@ -188,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
         login_btn = findViewById(R.id.login);
         uc_btn = findViewById(R.id.uc);
         stock_btn = findViewById(R.id.stock);
-        ball_btn=findViewById(R.id.genDoubleBall);
+        ball_btn = findViewById(R.id.genDoubleBall);
 //        login_btn.setVisibility(View.INVISIBLE);
 
         uidedt = findViewById(R.id.uid_et);
@@ -256,7 +341,9 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
-    public native int intFromJNI();
+
+    public native long longFromJNI();
+
     @Override
     public void onStart() {
         super.onStart();

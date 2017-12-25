@@ -9,10 +9,9 @@ import json
 import datetime
 import yougu
 
-
 now = datetime.datetime.now()
 
-timeDir = now.strftime('%Y-%m-%d %H\'%M\'%S')
+timeDir = 'test'#now.strftime('%Y-%m-%d %H\'%M\'%S')
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -55,8 +54,8 @@ def checkDir(dir):
 
 
 class Weibo:
-    username = '75023143@qq.com'
-    password = '331730216'
+    username = '75023143@qq.com'#raw_input('input sina weibo id: ')
+    password = '331730216'#raw_input('input secret: ')
     cookies = ''
     allDir = 'html'
     tweetDir = allDir
@@ -69,11 +68,11 @@ class Weibo:
     def login(self):
         s = requests.Session()
 
-        #r = s.get('https://passport.weibo.cn/signin/login')
+        # r = s.get('https://passport.weibo.cn/signin/login')
 
         # r = s.get('https://passport.weibo.cn/sso/login')
         # r = s.get("http://httpbin.org/cookies")
-        #print (r.status_code)
+        # print (r.status_code)
         # with open("code.html", "wb") as code:
         # code.write(r.content)
         payload = {
@@ -103,7 +102,7 @@ class Weibo:
             'Content-Length': str(len(payload)),
             'Content-Type': 'application/x-www-form-urlencoded',
             'Host': 'passport.weibo.cn',
-            'Cache-Control':'no-cache',
+            'Cache-Control': 'no-cache',
         }
         r = requests.post("https://passport.weibo.cn/sso/login", data=payload, headers=headers)
         # print(r.history)
@@ -303,7 +302,7 @@ class Weibo:
         print sub
 
     def test9(self):
-        sub='_2AkMtSuurf8NxqwJRmPEWzGLnbY1wwwzEieKbFhpwJRMxHRl-yT9jqlEYtRB6XNyh2BGCWNY08ICCAHshfTwl1d1fsWoa&'
+        sub = '_2AkMtSuurf8NxqwJRmPEWzGLnbY1wwwzEieKbFhpwJRMxHRl-yT9jqlEYtRB6XNyh2BGCWNY08ICCAHshfTwl1d1fsWoa&'
         subp = '0033WrSXqPxfM72-Ws9jqgMF55529P9D9W5U7lA6__aRkAmiaClWdh7R'
         url = 'https://login.sina.com.cn/visitor/visitor?a=crossdomain&' \
               'cb=return_back&' \
@@ -503,19 +502,22 @@ class Weibo:
 
     def getAtUserNum(self, name):
         a = open(name).read()
+        print name
         selector = etree.HTML(a)
-
         tw = '//div[@id="pagelist"]/form/div/input[@name="mp"]/@value'
         follow_href = (selector.xpath(tw))
-        # print follow_href
+        print int(follow_href[0])
         return int(follow_href[0])
 
     def parseAtUserHtml(self, opf, name):
         a = open(name).read()
+        print name
         selector = etree.HTML(a)
-
-        tw = '//div[@id="pagelist"]/form/div/input[@name="mp"]/@value'
+        tw = '//span[@class="cmt"]/@value'
+        tw = '//div[@class="c"]/div[2]/text()[1]'
+        '//*[@id="M_Fi1vrpynz"]/div[2]/text()[1]'
         follow_href = (selector.xpath(tw))
+        print follow_href
         print 'TODO:'
 
     def parseFollow(self, uid):
@@ -553,11 +555,11 @@ if __name__ == "__main__":
     #
     # return
 
-    a.getTweetHtml(uid)
-    a.getFollowHtml(uid)
-    a.getAtUserHtml(uid)
-    a.parseTweet(uid)
-    a.parseFollow(uid)
+    # a.getTweetHtml(uid)
+    # a.getFollowHtml(uid)
+    # a.getAtUserHtml(uid)
+    # a.parseTweet(uid)
+    # a.parseFollow(uid)
     a.parseAtUser(uid)
 
 if __name__ == "__main1__":
