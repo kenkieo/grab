@@ -11,8 +11,8 @@ import yougu
 
 now = datetime.datetime.now()
 
-timeDir = 'test'#now.strftime('%Y-%m-%d %H\'%M\'%S')
-
+timeDir =  now.strftime('%Y-%m-%d %H\'%M\'%S')
+# timeDir = 'test'
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -54,8 +54,8 @@ def checkDir(dir):
 
 
 class Weibo:
-    username = '75023143@qq.com'#raw_input('input sina weibo id: ')
-    password = '331730216'#raw_input('input secret: ')
+    username = '75023143@qq.com'  # raw_input('input sina weibo id: ')
+    password = '331730216'  # raw_input('input secret: ')
     cookies = ''
     allDir = 'html'
     tweetDir = allDir
@@ -514,11 +514,47 @@ class Weibo:
         print name
         selector = etree.HTML(a)
         tw = '//span[@class="cmt"]/@value'
-        tw = '//div[@class="c"]/div[2]/text()[1]'
-        '//*[@id="M_Fi1vrpynz"]/div[2]/text()[1]'
-        follow_href = (selector.xpath(tw))
-        print follow_href
-        print 'TODO:'
+        # tw = '//div[@class="c"]/div[2]/text()[1]'
+        # follow_href = (selector.xpath(tw))
+        # l = len(follow_href)
+        # for i in range(0, l):
+        #     print follow_href[i].decode("utf-8")
+
+        sel_id = '//div[@class="c"]/@id'
+        ids = selector.xpath(sel_id)
+        # print len(ids)
+        for each in ids:
+            # print each
+            sel_tw = '//div[@class="c"][@id="' + each + '"]/div[1]/a[@class="nk"]/text()'
+            '//*[@id="M_Fi1vrpynz"]/div[1]/a[1]'
+
+            ww = selector.xpath(sel_tw)
+
+            sel_tw = '//div[@class="c"][@id="' + each + '"]/div[last()]/text()[1]'
+
+            tw = selector.xpath(sel_tw)
+            l = len(tw)
+            sel_tw = '//div[@class="c"][@id="' + each + '"]/div[last()]/a/text()'
+
+            lw = selector.xpath(sel_tw)
+
+            sel_tw = '//div[@class="c"][@id="' + each + '"]/div[last()]/span[@class="ct"]/text()'
+
+            rw = selector.xpath(sel_tw)
+            opf.writeString(ww[0].decode("utf-8") + " : ")
+            for i in range(0, l):
+                opf.writeStringLine(tw[i].decode("utf-8"))
+                ll = len(lw)
+                for j in range(0, ll):
+                    opf.writeString(lw[j].decode("utf-8"))
+                    # print rw.decode("utf-8")
+                    # for k in range(0, lll):
+                    #     print lw[j][k].decode("utf-8")
+            opf.writeStringLine('')
+            opf.writeStringLine(rw[0].decode("utf-8"))
+            opf.writeStringLine('')
+
+    print 'TODO:'
 
     def parseFollow(self, uid):
         dir = self.allDir + '/' + uid + '/' + timeDir
@@ -537,12 +573,13 @@ class Weibo:
         opf = OpFile(dir + '/at.txt')
         parse_file = dir + '/at/atuser1.html'
         no = self.getAtUserNum(parse_file)
-        for i in range(2, no + 1):
+        for i in range(1, no + 1):
             parse_file = dir + '/at/atuser' + str(i) + '.html'
             self.parseAtUserHtml(opf, parse_file)
 
 
 ########################################################
+
 
 if __name__ == "__main__":
     uid = '1772392290'
@@ -555,11 +592,11 @@ if __name__ == "__main__":
     #
     # return
 
-    # a.getTweetHtml(uid)
-    # a.getFollowHtml(uid)
-    # a.getAtUserHtml(uid)
-    # a.parseTweet(uid)
-    # a.parseFollow(uid)
+    a.getTweetHtml(uid)
+    a.getFollowHtml(uid)
+    a.getAtUserHtml(uid)
+    a.parseTweet(uid)
+    a.parseFollow(uid)
     a.parseAtUser(uid)
 
 if __name__ == "__main1__":
