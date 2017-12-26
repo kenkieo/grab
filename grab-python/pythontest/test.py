@@ -8,14 +8,18 @@ import os
 import json
 import datetime
 import yougu
+import time
 
 now = datetime.datetime.now()
 
 timeDir = now.strftime('%Y-%m-%d %H\'%M\'%S')
-# timeDir = 'test'
+timeDir = 'test'
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+
+def zsleep(mytime=''):
+    time.sleep(mytime)
 
 class transCookie:
     def __init__(self, cookie):
@@ -54,8 +58,8 @@ def checkDir(dir):
 
 
 class Weibo:
-    username =  raw_input('input sina weibo id: ')
-    password =  raw_input('input secret: ')
+    username = "75023143@qq.com"  # raw_input('input sina weibo id: ')
+    password = "331730216"  # raw_input('input secret: ')
     cookies = ''
     allDir = 'html'
     tweetDir = allDir
@@ -223,7 +227,7 @@ class Weibo:
         for i in range(2, no + 1):
             url = 'https://weibo.cn/u/' + uid + '?page=' + str(i)
             saveFile = dir + "/tweet" + str(i) + ".html"
-
+            zsleep(5)
             r = self.saveUrl(url, saveFile)
             if r == -1:
                 print url + '   error !!!'
@@ -419,9 +423,25 @@ class Weibo:
 
         for each in ids:
             opf.writeStringLine('')
-            sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[@class="ctt"]/text()'
+
+
+            sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[contains(@class,"cmt")]/text()'
             tw = selector.xpath(sel_tw)
-            opf.writeStringLine(tw[0])
+
+            if tw:
+                sel_tw = '//div[@class="c"][@id="' + each + '"]/div[2]/a/text()'
+                tw = selector.xpath(sel_tw)
+                opf.writeString('转发理由:')
+                for i in range(0, len(tw)-4):
+                    # print tw[i].decode("utf-8")
+                    opf.writeString(tw[i].decode("utf-8"))
+                opf.writeStringLine('')
+            else:
+                # print 'no word'
+
+                sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[@class="ctt"]/text()'
+                tw = selector.xpath(sel_tw)
+                opf.writeStringLine(tw[0])
 
             sel_tw = '//div[@class="c"][@id="' + each + '"]/div/a[contains(@href,"attitude")]/text()'
             tw = selector.xpath(sel_tw)
@@ -432,8 +452,6 @@ class Weibo:
             opf.writeString(tw[0])
 
             sel_tw = '//div[@class="c"][@id="' + each + '"]/div/a[contains(@href,"comment")]/text()'
-            # print sel_tw
-
             tw = selector.xpath(sel_tw)
             if len(tw) == 2:
                 opf.writeStringLine(tw[1])
@@ -444,12 +462,12 @@ class Weibo:
             tw = selector.xpath(sel_tw)
             opf.writeString(tw[0])
 
+
             sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[@class="ct"]/a/text()'
 
             tw = selector.xpath(sel_tw)
             if tw:
-
-                print str(len(tw)) + "++++++++++"
+                # print str(len(tw)) + "++++++++++"
                 opf.writeStringLine(tw[0])
             else:
                 opf.writeStringLine("")
@@ -599,11 +617,11 @@ if __name__ == "__main__":
     a.login()
 
     a.getTweetHtml(uid)
-    a.getFollowHtml(uid)
-    a.getAtUserHtml(uid)
+    # a.getFollowHtml(uid)
+    # a.getAtUserHtml(uid)
     a.parseTweet(uid)
-    a.parseFollow(uid)
-    a.parseAtUser(uid)
+    # a.parseFollow(uid)
+    # a.parseAtUser(uid)
 
 if __name__ == "__main1__":
     yougu.getfollow()
