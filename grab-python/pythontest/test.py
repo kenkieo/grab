@@ -21,6 +21,7 @@ sys.setdefaultencoding('utf-8')
 def zsleep(mytime=''):
     time.sleep(mytime)
 
+
 class transCookie:
     def __init__(self, cookie):
         self.cookie = cookie
@@ -149,7 +150,7 @@ class Weibo:
             code.write(r.content)
             return 0
 
-    def getAtUserHtml(self, uid):
+    def getUidAtUserHtml(self, uid):
         'https://weibo.cn/at/weibo?uid=xxxxxxxxx&page=1'
         dir = self.allDir + '/' + uid + '/' + timeDir + '/at'
         self.atUserDir = dir
@@ -163,7 +164,7 @@ class Weibo:
                 print url + '   error !!!'
                 return
 
-    def getFollowHtml(self, uid):
+    def getUidFollowHtml(self, uid):
 
         dir = self.allDir + '/' + uid + '/' + timeDir + '/follow'
         self.followDir = dir
@@ -208,7 +209,7 @@ class Weibo:
         print no
         return no
 
-    def getTweetHtml(self, uid):
+    def getUidTweetHtml(self, uid):
 
         dir = self.allDir + '/' + uid + '/' + timeDir + '/tweet'
         self.tweetDir = dir
@@ -424,7 +425,6 @@ class Weibo:
         for each in ids:
             opf.writeStringLine('')
 
-
             sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[contains(@class,"cmt")]/text()'
             tw = selector.xpath(sel_tw)
 
@@ -432,7 +432,7 @@ class Weibo:
                 sel_tw = '//div[@class="c"][@id="' + each + '"]/div[2]/a/text()'
                 tw = selector.xpath(sel_tw)
                 opf.writeString('转发理由:')
-                for i in range(0, len(tw)-4):
+                for i in range(0, len(tw) - 4):
                     # print tw[i].decode("utf-8")
                     opf.writeString(tw[i].decode("utf-8"))
                 opf.writeStringLine('')
@@ -462,7 +462,6 @@ class Weibo:
             tw = selector.xpath(sel_tw)
             opf.writeString(tw[0])
 
-
             sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[@class="ct"]/a/text()'
 
             tw = selector.xpath(sel_tw)
@@ -479,8 +478,8 @@ class Weibo:
         self.tweetDir = dir
         checkDir(dir)
 
-    def parseTweet(self, uid):
-        dir = self.allDir + '/' + uid + '/' + timeDir
+    def parseDirTweet(self, mdir):
+        dir = mdir
         opf = OpFile(dir + '/tweet.txt')
         parse_file = dir + '/tweet' + '/tweet1.html'
         self.parseHeadHtml(opf, parse_file)
@@ -491,8 +490,11 @@ class Weibo:
             parse_file = dir + '/tweet' + '/tweet' + str(i) + '.html'
             self.parseTweetHtml(opf, parse_file)
             print parse_file
-
         opf.close()
+
+    def parseUidTweet(self, uid):
+        dir = self.allDir + '/' + uid + '/' + timeDir
+        self.parseDirTweet(dir)
 
     def parseFollowHtml(self, opf, name):
         a = open(name).read()
@@ -582,28 +584,34 @@ class Weibo:
             opf.writeStringLine(rw[0].decode("utf-8"))
             opf.writeStringLine('')
 
-    print 'TODO:'
+    # print 'TODO:'
 
-    def parseFollow(self, uid):
-        dir = self.allDir + '/' + uid + '/' + timeDir
+    def parseDirFollow(self, dir):
+
         opf = OpFile(dir + '/follow.txt')
         parse_file = dir + '/tweet' + '/tweet1.html'
         print parse_file
         no = self.getFollowNums(parse_file)
         for i in range(1, no + 1):
             parse_file = dir + '/follow/follow' + str(i) + '.html'
-
             self.parseFollowHtml(opf, parse_file)
         opf.close()
 
-    def parseAtUser(self, uid):
+    def parseUidFollow(self, uid):
         dir = self.allDir + '/' + uid + '/' + timeDir
+        self.parseDirFollow(dir)
+
+    def parseDirAtUser(self, dir):
         opf = OpFile(dir + '/at.txt')
         parse_file = dir + '/at/atuser1.html'
         no = self.getAtUserNum(parse_file)
         for i in range(1, no + 1):
             parse_file = dir + '/at/atuser' + str(i) + '.html'
             self.parseAtUserHtml(opf, parse_file)
+
+    def parseUidAtUser(self, uid):
+        dir = self.allDir + '/' + uid + '/' + timeDir
+        self.parseDirAtUser(dir)
 
 
 ########################################################
@@ -616,12 +624,12 @@ if __name__ == "__main__":
     a = Weibo()
     a.login()
 
-    a.getTweetHtml(uid)
-    # a.getFollowHtml(uid)
-    # a.getAtUserHtml(uid)
-    a.parseTweet(uid)
-    # a.parseFollow(uid)
-    # a.parseAtUser(uid)
+    # a.getUidTweetHtml(uid)
+    # a.getUidFollowHtml(uid)
+    # a.getUidAtUserHtml(uid)
+    a.parseUidTweet(uid)
+    a.parseUidFollow(uid)
+    a.parseUidAtUser(uid)
 
 if __name__ == "__main1__":
     yougu.getfollow()
