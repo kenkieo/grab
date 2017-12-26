@@ -2,7 +2,7 @@
 
 import requests
 from lxml import etree
-import re
+
 import sys
 import os
 import json
@@ -11,7 +11,7 @@ import yougu
 
 now = datetime.datetime.now()
 
-timeDir =  now.strftime('%Y-%m-%d %H\'%M\'%S')
+timeDir = now.strftime('%Y-%m-%d %H\'%M\'%S')
 # timeDir = 'test'
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -54,8 +54,8 @@ def checkDir(dir):
 
 
 class Weibo:
-    username = '75023143@qq.com'  # raw_input('input sina weibo id: ')
-    password = '331730216'  # raw_input('input secret: ')
+    username =  raw_input('input sina weibo id: ')
+    password =  raw_input('input secret: ')
     cookies = ''
     allDir = 'html'
     tweetDir = allDir
@@ -442,7 +442,17 @@ class Weibo:
 
             sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[@class="ct"]/text()'
             tw = selector.xpath(sel_tw)
-            opf.writeStringLine(tw[0])
+            opf.writeString(tw[0])
+
+            sel_tw = '//div[@class="c"][@id="' + each + '"]/div/span[@class="ct"]/a/text()'
+
+            tw = selector.xpath(sel_tw)
+            if tw:
+
+                print str(len(tw)) + "++++++++++"
+                opf.writeStringLine(tw[0])
+            else:
+                opf.writeStringLine("")
             # print ''
             # break
 
@@ -587,10 +597,6 @@ if __name__ == "__main__":
 
     a = Weibo()
     a.login()
-    # a.test()
-    # a.getUserInfo(uid)
-    #
-    # return
 
     a.getTweetHtml(uid)
     a.getFollowHtml(uid)
