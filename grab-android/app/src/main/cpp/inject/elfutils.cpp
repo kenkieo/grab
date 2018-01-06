@@ -15,11 +15,7 @@ char *sname
 ) {
     Elf32_Shdr *target = NULL;
     Elf32_Shdr *shdr = info.shdr;
-    for (
-            int i = 0;
-            i < info.ehdr->
-                    e_shnum;
-            i++) {
+    for (int i = 0; i < info.ehdr->e_shnum; i++) {
         const char *name = (const char *) (shdr[i].sh_name + info.shstr);
         if (!strncmp(name, sname, strlen(sname)
         )) {
@@ -104,7 +100,7 @@ void getElfInfoByHeader(ElfInfo &info, const ElfHandle *handle) {
     info.elf_base = (uint8_t *) handle->base;
 //    DL_DEBUG("-----------------");
 //    printWordHex(info.elf_base);
-    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.elf_base);
+//    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.elf_base);
 //    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_shoff);
 //    DL_DEBUG("getElfInfoByHeader() type ===== %d", info.ehdr->e_phoff);
 
@@ -278,10 +274,8 @@ void printSegments(ElfInfo &info) {
 
     DL_DEBUG("Segments: \n");
     for (int i = 0; i < phnum; i++) {
-        DL_DEBUG("[%.2d] %-20d 0x%-.8x 0x%-.8x %-8d %-8d\n", i,
-                 phdr[i].p_type, phdr[i].p_vaddr,
-                 phdr[i].p_paddr, phdr[i].p_filesz,
-                 phdr[i].p_memsz);
+        DL_DEBUG("[%.2d] %-20d 0x%-.8x 0x%-.8x %-8d %-8d\n", i, phdr[i].p_type, phdr[i].p_vaddr,
+                 phdr[i].p_paddr, phdr[i].p_filesz, phdr[i].p_memsz);
     }
 }
 

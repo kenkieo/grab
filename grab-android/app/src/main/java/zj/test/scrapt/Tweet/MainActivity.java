@@ -30,6 +30,7 @@ import java.util.Random;
 import zj.test.scrapt.R;
 import zj.test.scrapt.Stock.StockActivity;
 import zj.test.scrapt.Wifi.WifiControl;
+import zj.zfenlly.gua.LoadInjectLib;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     Button ball_btn = null;
     Button record_btn = null;
 
-
     String uid;
     String pwd;
     Runnable ballRunnable = new Runnable() {
@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             String s = "         ";
             EventBus.getDefault().post(new MainEvent(s, true));
-
-
             EventBus.getDefault().post(new MainEvent("" + random(6, 1, 34), false));
         }
     };
@@ -268,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Example of a call to a native method
         tv = findViewById(R.id.sample_text);
-        tv.setText(stringFromJNI());
+
 
         login_btn = findViewById(R.id.login);
         uc_btn = findViewById(R.id.uc);
@@ -333,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        LoadInjectLib.init(getPackageName());
     }
 
     /**
@@ -359,6 +357,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        tv.setText(stringFromJNI());
         if (allowWriteExternal()) {
             ;//new Thread(runnable).start();
         }

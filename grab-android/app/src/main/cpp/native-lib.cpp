@@ -13,7 +13,7 @@ Java_zj_test_scrapt_Tweet_MainActivity_stringFromJNI(JNIEnv *env, jobject /* thi
 
     char str[32];
 
-//    a = arc4random();
+    a = arc4random();
 //    memset(str, 0, sizeof(str));
     sprintf(str, "%d", a);
     return env->NewStringUTF(str);

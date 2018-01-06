@@ -9,11 +9,12 @@ import json
 import datetime
 import yougu
 import time
-
+Debuggable = False
 now = datetime.datetime.now()
 
 timeDir = now.strftime('%Y-%m-%d %H\'%M\'%S')
-timeDir = 'test'
+if Debuggable == True:
+    timeDir = 'test'
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -622,11 +623,12 @@ if __name__ == "__main__":
     # uid = '3373931552'
 
     a = Weibo()
-    a.login()
 
-    # a.getUidTweetHtml(uid)
-    # a.getUidFollowHtml(uid)
-    # a.getUidAtUserHtml(uid)
+    if Debuggable == False:
+        a.login()
+        a.getUidTweetHtml(uid)
+        a.getUidFollowHtml(uid)
+        a.getUidAtUserHtml(uid)
     a.parseUidTweet(uid)
     a.parseUidFollow(uid)
     a.parseUidAtUser(uid)

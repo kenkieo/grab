@@ -62,11 +62,14 @@ AddInfo *get_module_base(pid_t pid, const char *module_name) {
     } else {
         snprintf(filename, sizeof(filename), "/proc/%d/maps", pid);
     }
+    DL_DEBUG("fopen %s", filename);
+    DL_DEBUG("module_name %s", module_name);
 
     fp = fopen(filename, "r");
 
     if (fp != NULL) {
         while (fgets(line, sizeof(line), fp)) {
+//            DL_DEBUG("line %s", line);
             if (strstr(line, module_name)) {
                 DL_DEBUG("_____ %s", line);
                 pch = strtok(line, "-");
@@ -101,7 +104,10 @@ AddInfo *get_module_base(pid_t pid, const char *module_name) {
             }
 
         }
+        DL_DEBUG("read end");
         fclose(fp);
+    } else {
+        DL_DEBUG("cannot fopen  ");
     }
     if (addrinfo == NULL) {
         DL_DEBUG("there is no  %s", module_name);
@@ -203,7 +209,7 @@ int changeLibFuncAddr(AddInfo *addr, const char *symbol, void *replace_func,
 
 int injectLibFunc(pid_t target_pid, const char *soname, const char *symbol, void *replace_func,
                   void **old_func) {
-//    void *addr;
+
     int i;
     AddInfo *base_addr;
     base_addr = getLibMemAddr(target_pid, soname);
@@ -219,6 +225,7 @@ int injectLibFunc(pid_t target_pid, const char *soname, const char *symbol, void
 
 static int modifyMemAccess(void *addr, int prots) {
     void *page_start_addr = (void *) PAGE_START((uint32_t) addr);
+    DL_DEBUG("modifyMemAccess %p  0x%x.", page_start_addr, getpagesize());
     return mprotect(page_start_addr, getpagesize(), prots);
 }
 

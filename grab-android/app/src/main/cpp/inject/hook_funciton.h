@@ -13,28 +13,28 @@ extern "C"
 #endif
 
 extern volatile  int miniteFlag;
-typedef struct hook_entry {
+struct hook_entry {
     const char *func_name;
     void *fn;
     void ** old_fn;
-} Hook_Entry;
+};
 
-typedef struct hook_funs{
+struct hook_funs{
     int len;
-    Hook_Entry **fun_entry;
-}Hook_Funs;
+    struct hook_entry **fun_entry;
+};
 
-typedef struct Hook_lib{
+struct Hook_lib{
     const char *lib_name;
-    Hook_Funs *funs_entry;
-}Hook_Lib;
+    struct hook_funs *funs_entry;
+};
 
-typedef struct Hook_libs{
+struct Hook_libs{
     int len;
-    Hook_Lib **lib_entry;
-}Hook_Libs;
+    struct Hook_lib **lib_entry;
+};
 
-extern Hook_Libs hook_libs;
+extern struct Hook_libs hook_libs;
 
 time_t time_hook(time_t *timer);
 

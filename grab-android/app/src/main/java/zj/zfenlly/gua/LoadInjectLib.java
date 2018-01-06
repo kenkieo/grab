@@ -16,9 +16,9 @@ public final class LoadInjectLib {
 
     public static void init(String pkg) {
 //        int i = injectLib("com.teamlava.castlestory");
-//        int i = injectLib("zfenlly.zj.hook");
+        int i = injectLib("com.mine.mirs");
 
-        int i = injectLib(pkg);
+//        int i = injectLib(pkg);
         Log.e("JTAG", "+" + i);
         Log.e("sTAG", "#     " + SystemTime.nanoTime());
     }
