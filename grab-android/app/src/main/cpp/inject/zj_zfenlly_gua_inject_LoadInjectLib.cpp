@@ -68,8 +68,9 @@ AddInfo *get_module_base(pid_t pid, const char *module_name) {
     fp = fopen(filename, "r");
 
     if (fp != NULL) {
+        DL_DEBUG("fopen  %s success !!!", filename);
         while (fgets(line, sizeof(line), fp)) {
-//            DL_DEBUG("line %s", line);
+            DL_DEBUG("line %s", line);
             if (strstr(line, module_name)) {
                 DL_DEBUG("_____ %s", line);
                 pch = strtok(line, "-");

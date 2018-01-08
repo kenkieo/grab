@@ -166,7 +166,7 @@ struct Hook_lib *hook_entries[] = {
         &hook_lib2
 };
 
-struct Hook_libs hook_libs = {
+struct Hook_libs hook_libs2 = {
         2,
         hook_entries
 };
@@ -175,7 +175,7 @@ struct Hook_lib *hook_entriesa[] = {
         &hook_lib3
 };
 
-struct Hook_libs hook_libs2 = {
+struct Hook_libs hook_libs = {
         1,//2
         hook_entriesa
 };
