@@ -61,12 +61,9 @@ public class ClickThread extends Thread {
             mHandler.sendMessage(mHandler.obtainMessage(
                     FloatWinService.SET_VIEW_STOP, null));
         while (times-- > 0 && isStart) {
-
             try {
                 downTime = SystemClock.uptimeMillis();
                 eventTime = SystemClock.uptimeMillis();
-
-
                 if (mCoordinateView != null) {
                     x_zb = mCoordinateView.x;
                     y_zb = mCoordinateView.y;
@@ -87,8 +84,6 @@ public class ClickThread extends Thread {
             try {
                 downTime = SystemClock.uptimeMillis();
                 eventTime = SystemClock.uptimeMillis();
-
-
                 if (mCoordinateView != null) {
                     x_zb = mCoordinateView.x;
                     y_zb = mCoordinateView.y;
