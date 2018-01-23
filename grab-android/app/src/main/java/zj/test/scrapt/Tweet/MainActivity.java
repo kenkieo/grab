@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import zj.test.scrapt.Odds.OddsActivity;
 import zj.test.scrapt.R;
 import zj.test.scrapt.Stock.StockActivity;
 import zj.test.scrapt.Wifi.WifiControl;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     Button stock_btn = null;
     Button ball_btn = null;
     Button record_btn = null;
-
+    Button odds_btn = null;
     String uid;
     String pwd;
     Runnable ballRunnable = new Runnable() {
@@ -277,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         uidedt = findViewById(R.id.uid_et);
         pwdedt = findViewById(R.id.pswd_et);
         record_btn = findViewById(R.id.record);
-
+        odds_btn = findViewById(R.id.odds);
 
         uidedt.setText(ShareP.getUidFromPref(this));
         pwdedt.setText(ShareP.getPwdFromPref(this));
@@ -297,7 +298,15 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(ballRunnable).start();
             }
         });
-
+        odds_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+//                //指定intent要启动的类
+                intent.setClass(MainActivity.this, OddsActivity.class);
+                startActivity(intent);
+            }
+        });
         record_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
