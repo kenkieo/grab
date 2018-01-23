@@ -9,15 +9,17 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="cydia.permission.SUBSTRATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="cydia.permission.SUBSTRATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:sharedUserId="android.uid.system"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
@@ -30,6 +32,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Stock.StockActivity"></activity>
+        <activity android:name=".Odds.OddsActivity"></activity>
+
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import zj.zfenlly.wifi.WifiAdmin;
 
+import static com.apportable.activity.VerdeActivity.stopClickVibrate;
 import static zj.zfenlly.gua.SystemInfo.CPU_TYPE;
 import static zj.zfenlly.gua.TimeSetting.getTimes;
 
@@ -66,6 +67,7 @@ public class FloatWinService extends Service {
             switch (msg.what) {
                 case SET_VIEW_START:
                     ns.play(2);
+                    stopClickVibrate();
                     startClickView.setText("s");
                     break;
                 case SET_VIEW_STOP:

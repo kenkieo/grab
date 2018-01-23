@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/uid_et"
-        android:inputType="text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:inputType="text" />
+
     <EditText
         android:id="@+id/pswd_et"
-        android:inputType="textPassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="textPassword" />
+
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login" />
+
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="280dp"
+        android:layout_height="200dp"
         android:fadingEdge="vertical"
         android:scrollbars="vertical">
+
         <TextView
             android:id="@+id/sample_text"
             android:layout_width="match_parent"
@@ -31,25 +35,35 @@
             android:scrollbars="vertical"
             android:text="Hello World!" />
     </ScrollView>
+
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/record"
-        android:visibility="invisible"
-        android:text="Record" />
-    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Record"
+        android:visibility="invisible" />
+
+    <Button
         android:id="@+id/genDoubleBall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Double Ball" />
+
     <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/uc"
-        android:text="Explorer" />
-    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Explorer" />
+
+    <Button
         android:id="@+id/stock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Youguu" />
+
+    <Button
+        android:id="@+id/odds"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Odds" />
 </LinearLayout>
