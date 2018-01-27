@@ -15,7 +15,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import zj.test.scrapt.R;
-import zj.zfenlly.gua.LoadInjectLib;
 
 import static zj.test.scrapt.Stock.StockEvent.EventType.COLOR_DIS;
 
@@ -40,22 +39,17 @@ public class StockActivity extends Activity {
                     g.getAttUserInfo(a.id + "");
                     g.getAttUserInfo2(a.id + "");
                     g.getAttUserInfo3(a.id + "");
-//                }
-//                sa = g.getListUser();
-//                for (UserInfo a : sa) {
-                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------------------", false));
+                    EventBus.getDefault().post(new StockEvent("=================================================", false));
                     EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
+                    EventBus.getDefault().post(new StockEvent("--------------------------------------------------------------------------------------------------", false));
                     s = g.getUserTrade(a.id + "");
                     EventBus.getDefault().post(new StockEvent(s, false));
-//                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------------------", false));
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
                 s = e.getMessage();
                 EventBus.getDefault().post(new StockEvent(s, true));
             }
-
         }
     };
 
@@ -64,6 +58,8 @@ public class StockActivity extends Activity {
         String RED_COLOR = "<font color=\'#ff0000\'>";
         String BLUE_COLOR = "<font color=\'#0000ff\'>";
         String GREEN_COLOR = "<font color=\'#00ff00\'>";
+        String VIOLET_COLOR = "<font color=\'#9966cc\'>";
+        String CORAL3_COLOR = "<font color=\'#cd5b45\'>";
         String COLOR_START = RED_COLOR;
         String COLOR_END = "</font>";
         s = uinfo.toPercent(uinfo.sucRate);
@@ -72,11 +68,11 @@ public class StockActivity extends Activity {
 //        String mp = uinfo.toPercent(uinfo.mProfit);
         StringBuilder a = new StringBuilder();
         a.append(getResources().getString(R.string.id) + uinfo.id + " : " + uinfo.nickname + "<br>");
-        if (s.indexOf("-") == -1) COLOR_START = RED_COLOR;
-        else COLOR_START = BLUE_COLOR;
+        if (s.indexOf("-") == -1) COLOR_START = VIOLET_COLOR;
+        else COLOR_START = VIOLET_COLOR;
         a.append(getResources().getString(R.string.suc_rate) + COLOR_START + s + "% " + COLOR_END);
-
-        a.append(getResources().getString(R.string.t_rank) + uinfo.gettRank() + " ");
+        COLOR_START = CORAL3_COLOR;
+        a.append(getResources().getString(R.string.t_rank) + COLOR_START + uinfo.gettRank() + COLOR_END + " ");
         if (uinfo.tRise.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
         a.append(getResources().getString(R.string.t_rise) + COLOR_START + uinfo.tRise + COLOR_END + " ");
@@ -86,15 +82,16 @@ public class StockActivity extends Activity {
         if (uinfo.mProfit.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
         a.append(getResources().getString(R.string.m_profit) + COLOR_START + uinfo.mProfit + COLOR_END);
-        a.append(" " + getResources().getString(R.string.m_rank) + " " + uinfo.mRank + " ");
+        COLOR_START = CORAL3_COLOR;
+        a.append(" " + getResources().getString(R.string.m_rank) + " " + COLOR_START + uinfo.mRank + " " + COLOR_END);
         if (uinfo.mRise.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
         a.append(getResources().getString(R.string.m_rise) + COLOR_START + uinfo.mRise + COLOR_END + " <br>");
-
         if (uinfo.wProfit.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
         a.append(getResources().getString(R.string.w_profit) + COLOR_START + uinfo.wProfit + COLOR_END);
-        a.append(" " + getResources().getString(R.string.w_rank) + " " + uinfo.wRank + " ");
+        COLOR_START = CORAL3_COLOR;
+        a.append(" " + getResources().getString(R.string.w_rank) + " " + COLOR_START + uinfo.wRank + COLOR_END + " ");
         if (uinfo.wRise.indexOf("-") == -1) COLOR_START = RED_COLOR;
         else COLOR_START = BLUE_COLOR;
         a.append(getResources().getString(R.string.w_rise) + COLOR_START + uinfo.wRise + COLOR_END + " <br>");
@@ -109,19 +106,14 @@ public class StockActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stock);
-//        lv = findViewById(R.id.list_stock);
         tvs = findViewById(R.id.tv_stock);
         tvs.setMovementMethod(ScrollingMovementMethod.getInstance());
-
         new Thread(runnable).start();
-
-//        test();
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(StockEvent event) {
-
         if (event.clear == false) {
             if (event.type == StockEvent.EventType.MESSAGE_DIS) {
                 tvs.append(event.message + "\n");
@@ -152,5 +144,4 @@ public class StockActivity extends Activity {
         tvs.setText("");
         Log.e("ZTAG", "StockActivity onDestroy");
     }
-
 }

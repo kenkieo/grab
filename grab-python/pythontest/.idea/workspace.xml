@@ -17,8 +17,8 @@
       <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="143" column="42" lean-forward="false" selection-start-line="143" selection-start-column="42" selection-end-line="143" selection-end-column="42" />
+            <state relative-caret-position="220">
+              <caret line="147" column="36" lean-forward="false" selection-start-line="147" selection-start-column="36" selection-end-line="147" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -83,8 +83,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -101,6 +99,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -413,6 +413,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/yougu.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -430,8 +438,8 @@
     <entry file="file://$PROJECT_DIR$/html/more.html" />
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="143" column="42" lean-forward="false" selection-start-line="143" selection-start-column="42" selection-end-line="143" selection-end-column="42" />
+        <state relative-caret-position="220">
+          <caret line="147" column="36" lean-forward="false" selection-start-line="147" selection-start-column="36" selection-end-line="147" selection-end-column="36" />
           <folding />
         </state>
       </provider>

@@ -11,8 +11,8 @@
     <string name="w_profit">周收益:</string>
     <string name="m_rank">月排名:</string>
     <string name="t_profit">总收益:</string>
-    <string name="t_rise">总增涨率:</string>
-    <string name="w_rise">周增涨率:</string>
+    <string name="t_rise">总增涨:</string>
+    <string name="w_rise">周增涨:</string>
     <string name="m_profit">月收益:</string>
     <string name="w_rank">周排名:</string>
 </resources>
