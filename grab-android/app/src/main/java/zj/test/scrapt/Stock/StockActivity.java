@@ -39,11 +39,15 @@ public class StockActivity extends Activity {
                     g.getAttUserInfo(a.id + "");
                     g.getAttUserInfo2(a.id + "");
                     g.getAttUserInfo3(a.id + "");
-                    EventBus.getDefault().post(new StockEvent("=================================================", false));
-                    EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
-                    EventBus.getDefault().post(new StockEvent("--------------------------------------------------------------------------------------------------", false));
                     s = g.getUserTrade(a.id + "");
-                    EventBus.getDefault().post(new StockEvent(s, false));
+                    if (s.equals("")) {
+                        Log.e("ztag", "get user trade");
+                    } else {
+                        EventBus.getDefault().post(new StockEvent("=================================================", false));
+                        EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
+                        EventBus.getDefault().post(new StockEvent("--------------------------------------------------------------------------------------------------", false));
+                        EventBus.getDefault().post(new StockEvent(s, false));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
