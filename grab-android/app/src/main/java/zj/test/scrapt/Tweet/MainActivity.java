@@ -72,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new MainEvent(s, false));
                 s = a.getUserInfo("1772392290");
                 EventBus.getDefault().post(new MainEvent(s, false));
+                s = a.getUserInfo("1789247505");
+                EventBus.getDefault().post(new MainEvent(s, false));
+                s = a.getUserInfo("1726640331");
+                EventBus.getDefault().post(new MainEvent(s, false));
             } else {
                 s = "NetWork is disconnect!!!";
                 EventBus.getDefault().post(new MainEvent(s, false));

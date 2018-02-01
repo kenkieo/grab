@@ -9,7 +9,8 @@ import json
 import datetime
 import yougu
 import time
-Debuggable = False
+
+Debuggable = True
 now = datetime.datetime.now()
 
 timeDir = now.strftime('%Y-%m-%d %H\'%M\'%S')
@@ -127,8 +128,30 @@ class Weibo:
         r = requests.get(url, cookies=self.cookies)
         return r
 
+    def getPage(self):
+        payload = {'Accept': 'text/html, application/xhtml+xml, */*',
+                   'Accept-Language': 'zh-CN',
+                   'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
+                   'Accept-Encoding': 'gzip, deflate',
+                   'Host': 'weibo.com', 'Connection': 'Keep-Alive'}
+
+        url = 'https://weibo.com/1772392290/like?from=page_100505_profile&wvr=6&mod=like'
+        r = requests.get(url, params=payload)
+        print r.cookies
+        return r
+
+
+
     def getUrlNoCookies(self, url):
-        r = requests.get(url)
+        payload = {'Accept': 'text/html,application/xhtml+xml,*/*',
+                   'Accept-Encoding': 'gzip, deflate',
+                   'Accept-Language': 'zh-CN',
+                   'Connection': 'Keep-Alive', 'Host': 'weibo.com',
+                   'Referer': 'https://passport.weibo.com/visitor/visitor?entry=miniblog&a=enter&url=https%3A%2F%2Fweibo.com%2F1772392290%2Flike%3Ffrom%3Dpage_100505_profile%26wvr%3D6%26mod%3Dlike&domain=.weibo.com&ua=php-sso_sdk_client-0.6.23&_rand=1517455713.6972',
+                   'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)'
+                   }
+
+        r = requests.get(url, params=payload, cookies=self.cookies)
         return r
 
     def saveUrl(self, url, save):
@@ -150,6 +173,32 @@ class Weibo:
                 return -1
             code.write(r.content)
             return 0
+
+    def saveUrlNoCookies(self, url, save):
+        print url + " ===> " + save
+        with open(save, "wb") as code:
+            r = self.getUrlNoCookies(url)
+            if r.status_code != 200:
+                print url + '   error !!!'
+                return -1
+            code.write(r.content)
+            return 0
+
+    def getUidLikeHtml(self, uid):
+        'https://weibo.com/1772392290/like?from=page_100505_profile&wvr=6&mod=like'
+        dir = self.allDir + '/' + uid + '/' + timeDir + '/like'
+        self.atUserDir = dir
+        checkDir(dir)
+
+        for i in range(1, 2):
+            saveFile = dir + "/like" + str(i) + ".html"
+            url = 'https://weibo.com/' + uid + '/like?from=page_100505_profile&wvr=6&mod=like'
+            print url
+            r = self.saveUrlNoCookies(url, saveFile)
+            # r = -1
+            if r == -1:
+                print url + '   error !!!'
+                return
 
     def getUidAtUserHtml(self, uid):
         'https://weibo.cn/at/weibo?uid=xxxxxxxxx&page=1'
@@ -623,15 +672,17 @@ if __name__ == "__main__":
     # uid = '3373931552'
 
     a = Weibo()
-
+    # a.login()
     if Debuggable == False:
         a.login()
-        a.getUidTweetHtml(uid)
-        a.getUidFollowHtml(uid)
-        a.getUidAtUserHtml(uid)
-    a.parseUidTweet(uid)
-    a.parseUidFollow(uid)
-    a.parseUidAtUser(uid)
+        # a.getUidTweetHtml(uid)
+        # a.getUidFollowHtml(uid)
+        # a.getUidAtUserHtml(uid)
+    a.getPage()
+    # a.getUidLikeHtml(uid)
+    # a.parseUidTweet(uid)
+    # a.parseUidFollow(uid)
+    # a.parseUidAtUser(uid)
 
 if __name__ == "__main1__":
     yougu.getfollow()

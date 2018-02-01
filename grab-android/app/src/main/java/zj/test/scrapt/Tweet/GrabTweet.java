@@ -181,7 +181,7 @@ public class GrabTweet {
 
         }
 
-        s += "\n\n";
+        s += "\n";
         return s;
     }
 
@@ -308,7 +308,7 @@ public class GrabTweet {
         if (hasFresh == false) {
             Log.e("ZTAG", "have cookies: " + cookieNum);
             if (cookieNum == 4) {
-                return "has cookies " + cookieNum + "\n\n\n";
+                return "has cookies " + cookieNum + "\n\n";
             }
         }
         mCookiesStore.clear();
