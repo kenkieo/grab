@@ -10,7 +10,7 @@ import datetime
 import yougu
 import time
 
-Debuggable = True
+Debuggable = False
 now = datetime.datetime.now()
 
 timeDir = now.strftime('%Y-%m-%d %H\'%M\'%S')
@@ -129,17 +129,36 @@ class Weibo:
         return r
 
     def getPage(self):
-        payload = {'Accept': 'text/html, application/xhtml+xml, */*',
-                   'Accept-Language': 'zh-CN',
-                   'User-Agent': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)',
-                   'Accept-Encoding': 'gzip, deflate',
-                   'Host': 'weibo.com', 'Connection': 'Keep-Alive'}
+        headers = {
+            'Accept': 'text/html, application/xhtml+xml, image/jxr, */*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'zh-CN',
+            'Connection': 'Keep-Alive',
+            'Host': 'weibo.com',
+            'User-Agent': 'Mozilla / 5.0(Windows NT 10.0; Win64; x64) AppleWebKit / 537.36(KHTML, like Gecko) Chrome / 58.0.3029.110 Safari / 537.36 Edge / 16.16299'
+        }
 
-        url = 'https://weibo.com/1772392290/like?from=page_100505_profile&wvr=6&mod=like'
-        r = requests.get(url, params=payload)
-        print r.cookies
+        payload = {'from': 'page_100505_profile', 'mod': 'like', 'wvr': '6'}
+        url = 'https://weibo.com/1772392290/like'
+        r = requests.get(url, headers=headers, params=payload, allow_redirects=False,cookies=self.cookies)
+        print r
+        print r.headers.get('Set-Cookie', '')
+
+        location = r.headers.get('Location', '')
+
+        print 'Location: ', location
+        headers = {
+            'Accept': 'text/html, application/xhtml+xml, image/jxr, */*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'zh-CN',
+            'Connection': 'Keep-Alive',
+            'Host': 'passport.weibo.com',
+            'User-Agent': 'Mozilla / 5.0(Windows NT 10.0; Win64; x64) AppleWebKit / 537.36(KHTML, like Gecko) Chrome / 58.0.3029.110 Safari / 537.36 Edge / 16.16299'
+        }
+
+        r = requests.get(location, headers=headers, allow_redirects=False)
+        print r
         return r
-
 
 
     def getUrlNoCookies(self, url):
@@ -154,6 +173,7 @@ class Weibo:
         r = requests.get(url, params=payload, cookies=self.cookies)
         return r
 
+
     def saveUrl(self, url, save):
         print url + " ===> " + save
         with open(save, "wb") as code:
@@ -164,15 +184,6 @@ class Weibo:
             code.write(r.content)
             return 0
 
-    def saveUrlNoCookies(self, url, save):
-        print url + " ===> " + save
-        with open(save, "wb") as code:
-            r = self.getUrlNoCookies(url)
-            if r.status_code != 200:
-                print url + '   error !!!'
-                return -1
-            code.write(r.content)
-            return 0
 
     def saveUrlNoCookies(self, url, save):
         print url + " ===> " + save
@@ -183,6 +194,18 @@ class Weibo:
                 return -1
             code.write(r.content)
             return 0
+
+
+    def saveUrlNoCookies(self, url, save):
+        print url + " ===> " + save
+        with open(save, "wb") as code:
+            r = self.getUrlNoCookies(url)
+            if r.status_code != 200:
+                print url + '   error !!!'
+                return -1
+            code.write(r.content)
+            return 0
+
 
     def getUidLikeHtml(self, uid):
         'https://weibo.com/1772392290/like?from=page_100505_profile&wvr=6&mod=like'
@@ -200,6 +223,7 @@ class Weibo:
                 print url + '   error !!!'
                 return
 
+
     def getUidAtUserHtml(self, uid):
         'https://weibo.cn/at/weibo?uid=xxxxxxxxx&page=1'
         dir = self.allDir + '/' + uid + '/' + timeDir + '/at'
@@ -214,8 +238,8 @@ class Weibo:
                 print url + '   error !!!'
                 return
 
-    def getUidFollowHtml(self, uid):
 
+    def getUidFollowHtml(self, uid):
         dir = self.allDir + '/' + uid + '/' + timeDir + '/follow'
         self.followDir = dir
         checkDir(dir)
@@ -227,6 +251,7 @@ class Weibo:
             if r == -1:
                 print url + '   error !!!'
                 return
+
 
     def getTweetNums(self, saveFile):
         a = open(saveFile).read()
@@ -240,6 +265,7 @@ class Weibo:
 
         print no
         return no
+
 
     def getFollowNums(self, saveFile):
         a = open(saveFile).read()
@@ -259,8 +285,8 @@ class Weibo:
         print no
         return no
 
-    def getUidTweetHtml(self, uid):
 
+    def getUidTweetHtml(self, uid):
         dir = self.allDir + '/' + uid + '/' + timeDir + '/tweet'
         self.tweetDir = dir
         checkDir(dir)
@@ -284,6 +310,7 @@ class Weibo:
                 print url + '   error !!!'
                 return
 
+
     def test(self):
         # url = 'https://weibo.com/p/1005051772392290/info?mod=pedit_more'
         url = 'https://weibo.com/p/1005051772392290/info?mod=pedit_more'
@@ -299,6 +326,7 @@ class Weibo:
         }
         r = requests.get(url, headers=header1)
         print r
+
 
     def test7e(self):
         url = 'https://passport.weibo.com/visitor/genvisitor'
@@ -326,6 +354,7 @@ class Weibo:
         }
         r = requests.get(url, headers=header1, cookies=cookies)
         print r.content
+
 
     def test8(self):
         url = 'https://passport.weibo.com/visitor/visitor?a=incarnate&' \
@@ -355,6 +384,7 @@ class Weibo:
         sub = r.cookies.get_dict(domain='.weibo.com', path='/')['SUB']
         print subp
         print sub
+
 
     def test9(self):
         sub = '_2AkMtSuurf8NxqwJRmPEWzGLnbY1wwwzEieKbFhpwJRMxHRl-yT9jqlEYtRB6XNyh2BGCWNY08ICCAHshfTwl1d1fsWoa&'
@@ -447,6 +477,7 @@ class Weibo:
 
                     print v[0], ":", s[0], v[1], ":", s[1], v[2], ":", s[2]
 
+
     def parseHeadHtml(self, opf, filename):
         a = open(filename).read()
         selector = etree.HTML(a)
@@ -460,6 +491,7 @@ class Weibo:
         fans = ";".join(selector.xpath(sel_fans))
         print fans
         opf.writeStringLine(fans + ' ')
+
 
     def parseTweetHtml(self, opf, filename):
         # sel_tw = '//div[@class="c"]/div/span[@class="ctt"]/text()'
@@ -523,10 +555,12 @@ class Weibo:
             # print ''
             # break
 
+
     def parseHead(self, uid):
         dir = self.allDir + '/' + uid + '/tweet'
         self.tweetDir = dir
         checkDir(dir)
+
 
     def parseDirTweet(self, mdir):
         dir = mdir
@@ -542,9 +576,11 @@ class Weibo:
             print parse_file
         opf.close()
 
+
     def parseUidTweet(self, uid):
         dir = self.allDir + '/' + uid + '/' + timeDir
         self.parseDirTweet(dir)
+
 
     def parseFollowHtml(self, opf, name):
         a = open(name).read()
@@ -580,6 +616,7 @@ class Weibo:
             opf.writeStringLine(follow_fans[i])
         print ''
 
+
     def getAtUserNum(self, name):
         a = open(name).read()
         print name
@@ -588,6 +625,7 @@ class Weibo:
         follow_href = (selector.xpath(tw))
         print int(follow_href[0])
         return int(follow_href[0])
+
 
     def parseAtUserHtml(self, opf, name):
         a = open(name).read()
@@ -634,10 +672,10 @@ class Weibo:
             opf.writeStringLine(rw[0].decode("utf-8"))
             opf.writeStringLine('')
 
-    # print 'TODO:'
+        # print 'TODO:'
+
 
     def parseDirFollow(self, dir):
-
         opf = OpFile(dir + '/follow.txt')
         parse_file = dir + '/tweet' + '/tweet1.html'
         print parse_file
@@ -647,9 +685,11 @@ class Weibo:
             self.parseFollowHtml(opf, parse_file)
         opf.close()
 
+
     def parseUidFollow(self, uid):
         dir = self.allDir + '/' + uid + '/' + timeDir
         self.parseDirFollow(dir)
+
 
     def parseDirAtUser(self, dir):
         opf = OpFile(dir + '/at.txt')
@@ -658,6 +698,7 @@ class Weibo:
         for i in range(1, no + 1):
             parse_file = dir + '/at/atuser' + str(i) + '.html'
             self.parseAtUserHtml(opf, parse_file)
+
 
     def parseUidAtUser(self, uid):
         dir = self.allDir + '/' + uid + '/' + timeDir
@@ -675,14 +716,14 @@ if __name__ == "__main__":
     # a.login()
     if Debuggable == False:
         a.login()
-        # a.getUidTweetHtml(uid)
-        # a.getUidFollowHtml(uid)
-        # a.getUidAtUserHtml(uid)
-    a.getPage()
+        a.getUidTweetHtml(uid)
+        a.getUidFollowHtml(uid)
+        a.getUidAtUserHtml(uid)
+    # a.getPage()
     # a.getUidLikeHtml(uid)
-    # a.parseUidTweet(uid)
-    # a.parseUidFollow(uid)
-    # a.parseUidAtUser(uid)
+    a.parseUidTweet(uid)
+    a.parseUidFollow(uid)
+    a.parseUidAtUser(uid)
 
 if __name__ == "__main1__":
     yougu.getfollow()
