@@ -1,5 +1,7 @@
 package zj.test.scrapt.Tweet;
 
+import zj.test.scrapt.Tweet.DataBase.TweetNote;
+
 /**
  * Created by Administrator on 2017/11/10.
  */
@@ -26,6 +28,27 @@ public class TweetItem {
 
     public String toString() {
         return uid + "\nfollow: " + this.follow + " " + " fan: " + this.fan + " tweete: " + this.tweet + " code: " + this.integral;
+    }
+
+    public String toStringDiff(TweetNote tdb) {
+        return uid + "\nfollow: " + printDiff(this.follow, tdb.getFollow()) + " " + " fan: " + printDiff(this.fan, tdb.getFan()) + " tweete: " + printDiff(this.tweet, tdb.getTweet()) + " code: " + printDiff(this.integral, tdb.getIntegral());
+    }
+
+    String printDiff(int t, String tdb) {
+        int pre, now;
+        String s = "";
+        pre = Integer.parseInt(tdb);
+        now = (t);
+
+        if (pre == now) {
+            s += pre + "";
+        } else if (pre > now) {
+            s += pre + " -" + (pre - now);
+        } else if (now > pre) {
+            s += pre + " +" + (now - pre);
+        }
+
+        return s;
     }
 
     public String getUid() {
