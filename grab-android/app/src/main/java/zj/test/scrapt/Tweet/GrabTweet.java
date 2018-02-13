@@ -130,22 +130,22 @@ public class GrabTweet {
 
     }
 
-    String printDiff(String t, String tdb) {
-        int pre, now;
-        String s = "";
-        pre = Integer.parseInt(tdb);
-        now = Integer.parseInt(t);
-
-        if (pre == now) {
-            s += pre + "";
-        } else if (pre > now) {
-            s += pre + "-" + (pre - now);
-        } else if (now > pre) {
-            s += pre + "+" + (now - pre);
-        }
-
-        return s;
-    }
+//    String printDiff(String t, String tdb) {
+//        int pre, now;
+//        String s = "";
+//        pre = Integer.parseInt(tdb);
+//        now = Integer.parseInt(t);
+//
+//        if (pre == now) {
+//            s += pre + "";
+//        } else if (pre > now) {
+//            s += pre + "-" + (pre - now);
+//        } else if (now > pre) {
+//            s += pre + "+" + (now - pre);
+//        }
+//
+//        return s;
+//    }
 
     public String getUserInfo(String uid) {
         String s;
@@ -160,10 +160,11 @@ public class GrabTweet {
             TweetNote tdb = getTweetFromDB(uid);
             s = items.toString() + "\n";
             if (t.isEqual(tdb) == false) {
-                s = s + ((tdb == null) ? "-" : printDiff(t.getFollow(), tdb.getFollow())) + "  " +
-                        ((tdb == null) ? "-" : printDiff(t.getFan(), tdb.getFan())) + "  " +
-                        ((tdb == null) ? "-" : printDiff(t.getTweet(), tdb.getTweet())) + "  " +
-                        ((tdb == null) ? "-" : printDiff(t.getIntegral(), tdb.getIntegral())) + "  Update !!!";
+                s = items.toStringDiff(tdb) + " Update !!!";
+//                s = s + ((tdb == null) ? "-" : printDiff(t.getFollow(), tdb.getFollow())) + "  " +
+//                        ((tdb == null) ? "-" : printDiff(t.getFan(), tdb.getFan())) + "  " +
+//                        ((tdb == null) ? "-" : printDiff(t.getTweet(), tdb.getTweet())) + "  " +
+//                        ((tdb == null) ? "-" : printDiff(t.getIntegral(), tdb.getIntegral())) + "  Update !!!";
                 if ((tdb == null) || (!(t.getFollow().equals("0") || t.getFan().equals("0") || t.getTweet().equals("0") || t.getIntegral().equals("0")))) {
                     SetTweetFromDB(t, tdb);
                     Log.e("ZTAG", "set to DB");
@@ -181,7 +182,7 @@ public class GrabTweet {
 
         }
 
-        s += "\n\n";
+        s += "\n";
         return s;
     }
 
@@ -308,7 +309,7 @@ public class GrabTweet {
         if (hasFresh == false) {
             Log.e("ZTAG", "have cookies: " + cookieNum);
             if (cookieNum == 4) {
-                return "has cookies " + cookieNum + "\n\n\n";
+                return "has cookies " + cookieNum + "\n\n";
             }
         }
         mCookiesStore.clear();

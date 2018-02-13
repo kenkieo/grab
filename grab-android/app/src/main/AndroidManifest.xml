@@ -32,7 +32,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Stock.StockActivity"></activity>
-        <activity android:name=".Odds.OddsActivity"></activity>
+        <activity
+            android:name=".Odds.OddsActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
 
     </application>
 

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Proxy;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,14 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_ACCESS_EXTERNAL_STORAGE = 12334;
 
-    // Used to load the 'native-lib' library on application startup.
     static {
         System.loadLibrary("native-lib");
     }
 
-    Proxy a = new Proxy();
-
-    String spec;
     TextView tv = null;
     EditText uidedt = null;
     EditText pwdedt = null;
@@ -73,20 +68,18 @@ public class MainActivity extends AppCompatActivity {
                 GrabTweet a = new GrabTweet(MainActivity.this);
                 s = a.login(uid, pwd);
                 EventBus.getDefault().post(new MainEvent(s, false));
-//            Log.e("ZTAG", "GrabTweet" + a.login_bak());
-
                 s = a.getUserInfo("3373931552");
                 EventBus.getDefault().post(new MainEvent(s, false));
-//                s += a.getUserInfo("1789247505");
                 s = a.getUserInfo("1772392290");
                 EventBus.getDefault().post(new MainEvent(s, false));
-
+                s = a.getUserInfo("1789247505");
+                EventBus.getDefault().post(new MainEvent(s, false));
+                s = a.getUserInfo("1726640331");
+                EventBus.getDefault().post(new MainEvent(s, false));
             } else {
                 s = "NetWork is disconnect!!!";
                 EventBus.getDefault().post(new MainEvent(s, false));
             }
-
-
         }
     };
 
@@ -101,14 +94,12 @@ public class MainActivity extends AppCompatActivity {
         String a = "";
         String b = "";
 
-
         int len = maxValue - minValue;
         int[] tmpArray = new int[len];
         int[] tmp2Array = new int[num];
 
         for (int i = 0; i < len; i++) {
             tmpArray[i] = i + minValue;
-
         }
         for (int i = 0; i < num; i++) {
             tmp2Array[i] = 0;
@@ -138,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             a += tmp2Array[i] + " ";
-
         }
 
         a += " : " + b;
@@ -164,11 +154,9 @@ public class MainActivity extends AppCompatActivity {
                 l[i] = d;
             }
         }
-
         for (int i = 0; i < n; i++) {
             a += l[i] + " ";
         }
-
         return a;
     }
 
@@ -186,8 +174,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "passwd is null !!!", Toast.LENGTH_SHORT).show();
                 return false;
             }
-//            ShareP.setUidToPref(MainActivity.this, uid);
-//            ShareP.setPwdToPref(MainActivity.this, pwd);
             ready = true;
         }
         return ready;
@@ -210,11 +196,8 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE_ACCESS_EXTERNAL_STORAGE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ;//takePhoto();
                 Toast.makeText(MainActivity.this, "Permission allowed", Toast.LENGTH_SHORT).show();
-//                new Thread(runnable).start();
             } else {
-                // Permission Denied
                 Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
             }
         }
@@ -264,16 +247,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        // Example of a call to a native method
         tv = findViewById(R.id.sample_text);
-
 
         login_btn = findViewById(R.id.login);
         uc_btn = findViewById(R.id.uc);
         stock_btn = findViewById(R.id.stock);
         ball_btn = findViewById(R.id.genDoubleBall);
-//        login_btn.setVisibility(View.INVISIBLE);
 
         uidedt = findViewById(R.id.uid_et);
         pwdedt = findViewById(R.id.pswd_et);
@@ -282,8 +261,6 @@ public class MainActivity extends AppCompatActivity {
 
         uidedt.setText(ShareP.getUidFromPref(this));
         pwdedt.setText(ShareP.getPwdFromPref(this));
-//        uidedt.clearFocus();
-//        pwdedt.clearFocus();
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-//                //指定intent要启动的类
                 intent.setClass(MainActivity.this, OddsActivity.class);
                 startActivity(intent);
             }
@@ -325,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String spec = "https://weibo.cn/u/1772392290";
                 OpenWebView.open(MainActivity.this, spec);
-//                LoadInjectLib.init(getApplication().getPackageName());
             }
         });
 
@@ -333,10 +308,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
-//                //指定intent要启动的类
                 intent.setClass(MainActivity.this, StockActivity.class);
                 startActivity(intent);
-//                tv.setText(stringFromJNI());
             }
         });
 
@@ -371,6 +344,4 @@ public class MainActivity extends AppCompatActivity {
             ;//new Thread(runnable).start();
         }
     }
-
-
 }

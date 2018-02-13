@@ -25,6 +25,7 @@ public class MainEvent {
 
         public static final int MESSAGE_DIS = 0;
         public static final int RECORD_BTN = 1;
+        public static final int EDIT_FOCUS = 2;
 
     }
 }
