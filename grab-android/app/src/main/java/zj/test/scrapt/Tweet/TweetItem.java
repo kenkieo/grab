@@ -31,7 +31,7 @@ public class TweetItem {
     }
 
     public String toStringDiff(TweetNote tdb) {
-        return uid + "\nfollow: " + printDiff(this.follow, tdb.getFollow()) + " " + " fan: " + printDiff(this.fan, tdb.getFan()) + " tweete: " + printDiff(this.tweet, tdb.getTweet()) + " code: " + printDiff(this.integral, tdb.getIntegral());
+        return uid + "\nfollow: " + printDiff(this.follow, tdb == null ? "0" : tdb.getFollow()) + " " + " fan: " + printDiff(this.fan, tdb == null ? "0" : tdb.getFan()) + " tweete: " + printDiff(this.tweet, tdb == null ? "0" : tdb.getTweet()) + " code: " + printDiff(this.integral, tdb == null ? "0" : tdb.getIntegral());
     }
 
     String printDiff(int t, String tdb) {

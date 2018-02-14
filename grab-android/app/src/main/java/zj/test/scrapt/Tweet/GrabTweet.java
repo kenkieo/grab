@@ -159,7 +159,7 @@ public class GrabTweet {
             TweetNote t = TweetItemConvert(items);
             TweetNote tdb = getTweetFromDB(uid);
             s = items.toString() + "\n";
-            if (t.isEqual(tdb) == false) {
+            if (tdb == null || t.isEqual(tdb) == false) {
                 s = items.toStringDiff(tdb) + " Update !!!";
 //                s = s + ((tdb == null) ? "-" : printDiff(t.getFollow(), tdb.getFollow())) + "  " +
 //                        ((tdb == null) ? "-" : printDiff(t.getFan(), tdb.getFan())) + "  " +

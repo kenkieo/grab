@@ -43,9 +43,9 @@ public class StockActivity extends Activity {
                     if (s.equals("")) {
                         Log.e("ztag", "get user trade");
                     } else {
-                        EventBus.getDefault().post(new StockEvent("=================================================", false));
+                        EventBus.getDefault().post(new StockEvent("==============================================", false));
                         EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
-                        EventBus.getDefault().post(new StockEvent("--------------------------------------------------------------------------------------------------", false));
+                        EventBus.getDefault().post(new StockEvent("------------------------------------------------------------------------------------------", false));
                         EventBus.getDefault().post(new StockEvent(s, false));
                     }
                 }

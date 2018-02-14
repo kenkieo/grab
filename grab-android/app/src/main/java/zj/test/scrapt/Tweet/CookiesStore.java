@@ -49,7 +49,7 @@ public class CookiesStore {
                 String encodedCookie = cookiePrefs.getString(COOKIE_NAME_PREFIX + name, null);
                 if (encodedCookie != null) {
                     cookie = parseCookie(encodedCookie);
-//                    Log.e("ZTAG", "parseCookie: expiresAt " + (cookie.persistent() ? cookie.expiresAt() : "null"));
+                    Log.e("ZTAG", "parseCookie: expiresAt " + (cookie.persistent() ? cookie.expiresAt() : "null"));
                     if (cookie.persistent()) {
                         if (cookie.expiresAt() >= (new Date()).getTime()) {
                             cookies.put(name, cookie);
@@ -76,7 +76,7 @@ public class CookiesStore {
         int index;
         String first, second;
         for (int i = 1; i < t.length; i++) {
-//            Log.e("ZTAG", t[i] + " = ");
+            Log.e("ZTAG", t[i] + " = ");
 //        int i = 0;
             index = t[i].indexOf('=');
             if (index == -1) {
@@ -99,11 +99,15 @@ public class CookiesStore {
             }
         }
         Cookie cookie = null;
+//        if (domain == null) return null;
         if (date == null) {
             if (httponly) {
                 cookie = new Cookie.Builder().name(name).value(value).domain(domain).httpOnly().build();
             } else {
-                cookie = new Cookie.Builder().name(name).value(value).domain(domain).build();
+//                if (domain == null)
+//                    cookie = new Cookie.Builder().name(name).value(value).domain("").build();
+//                else
+                    cookie = new Cookie.Builder().name(name).value(value).domain(domain).build();
             }
         } else {
             if (httponly) {

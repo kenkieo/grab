@@ -5,7 +5,7 @@ android {
         android {
             keyAlias 'android'
             keyPassword '123456'
-            storeFile file('F:/apk/android.jks')
+            storeFile file('E:/F/apk/android.jks')
             storePassword '123456'
         }
     }
