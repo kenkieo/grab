@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import zj.zfenlly.gua.RFile.Rfile;
 import zj.zfenlly.wifi.WifiAdmin;
 
 import static com.apportable.activity.VerdeActivity.stopClickVibrate;

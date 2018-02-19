@@ -4,5 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="green">#00ff00</color>
+    <color name="white">#FFFfff</color>
+    <color name="grey">#33A045</color>
+    <color name="blue">#0000ff</color>
     <color name="abs__bright_foreground_disabled_holo_light">#ffb2b2b2</color>
 </resources>

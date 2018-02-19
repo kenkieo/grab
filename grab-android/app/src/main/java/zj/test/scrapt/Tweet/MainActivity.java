@@ -1,7 +1,7 @@
 package zj.test.scrapt.Tweet;
 
 import android.Manifest;
-import android.content.ComponentName;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -11,7 +11,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,10 +34,18 @@ import zj.test.scrapt.R;
 import zj.test.scrapt.Stock.StockActivity;
 import zj.test.scrapt.Wifi.WifiControl;
 import zj.zfenlly.gua.LoadInjectLib;
+import zj.zfenlly.gua.MPermissions;
+import zj.zfenlly.record.RecordActivity;
 
-public class MainActivity extends AppCompatActivity {
+import static zj.test.scrapt.Tweet.UserID.first_uid;
+import static zj.test.scrapt.Tweet.UserID.fourth_uid;
+import static zj.test.scrapt.Tweet.UserID.second_uid;
+import static zj.test.scrapt.Tweet.UserID.third_uid;
+
+public class MainActivity extends Activity {
 
     public static final int REQUEST_CODE_ACCESS_EXTERNAL_STORAGE = 12334;
+
 
     static {
         System.loadLibrary("native-lib");
@@ -47,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
     Button uc_btn = null;
     Button stock_btn = null;
     Button ball_btn = null;
-    Button record_btn = null;
+//    Button record_btn = null;
     Button odds_btn = null;
+    Button records_btn = null;
     String uid;
     String pwd;
     Runnable ballRunnable = new Runnable() {
@@ -68,13 +80,13 @@ public class MainActivity extends AppCompatActivity {
                 GrabTweet a = new GrabTweet(MainActivity.this);
                 s = a.login(uid, pwd);
                 EventBus.getDefault().post(new MainEvent(s, false));
-                s = a.getUserInfo("3373931552");
+                s = a.getUserInfo(first_uid);
                 EventBus.getDefault().post(new MainEvent(s, false));
-                s = a.getUserInfo("1772392290");
+                s = a.getUserInfo(second_uid);
                 EventBus.getDefault().post(new MainEvent(s, false));
-                s = a.getUserInfo("1789247505");
+                s = a.getUserInfo(third_uid);
                 EventBus.getDefault().post(new MainEvent(s, false));
-                s = a.getUserInfo("1726640331");
+                s = a.getUserInfo(fourth_uid);
                 EventBus.getDefault().post(new MainEvent(s, false));
             } else {
                 s = "NetWork is disconnect!!!";
@@ -180,27 +192,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean allowWriteExternal() {
-        if (selfPermissionGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != true) {
+        if (selfPermissionGranted(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != true) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Log.e("ztag", "request write external storage");
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_CODE_ACCESS_EXTERNAL_STORAGE);
             }
+            Log.e("ztag", "request write external storage return false");
             return false;
         } else {
+            Log.e("ztag", "request write external storage return true");
             return true;
         }
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        MPermissions.onResult(this, requestCode);//gua by linurm
+    }
+
+    //gua by linurm
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CODE_ACCESS_EXTERNAL_STORAGE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(MainActivity.this, "Permission allowed", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-        }
+        Log.e("ztag", "result: " + permissions.toString());
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//
+        MPermissions.onPermissionsResult(this, requestCode, permissions, grantResults);
+//        if (requestCode == REQUEST_CODE_ACCESS_EXTERNAL_STORAGE) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+////                Toast.makeText(this, "Permission allowed", Toast.LENGTH_SHORT).show();
+//                Log.e("ztag", "request write external storage granted");
+////                askForPermission();
+//            } else {
+//                Log.e("ztag", "request write external storage not granted");
+////                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+//            }
+//        } else if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                if (!Settings.canDrawOverlays(this)) {
+//                    Log.e("ztag", "draw overlay permission not granted");
+////                    Toast.makeText(this, "权限授予失败，无法开启悬浮窗", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Log.e("ztag", "draw overlay permission granted");
+////                    Toast.makeText(this, "权限授予成功！", Toast.LENGTH_SHORT).show();
+//                    //启动FxService
+//                    startService(floatWinIntent);
+//                }
+//            } else {
+//                startService(floatWinIntent);
+//            }
+//        }
     }
 
     public boolean selfPermissionGranted(Context context, String permission) {
@@ -235,11 +276,11 @@ public class MainActivity extends AppCompatActivity {
                 if (tv != null) tv.append(event.message);
             }
         } else if (event.type == MainEvent.EventType.RECORD_BTN) {
-            if (event.clear) {
-                if (record_btn != null) record_btn.setVisibility(View.VISIBLE);
-            } else {
-                if (record_btn != null) record_btn.setVisibility(View.INVISIBLE);
-            }
+//            if (event.clear) {
+//                if (record_btn != null) record_btn.setVisibility(View.VISIBLE);
+//            } else {
+//                if (record_btn != null) record_btn.setVisibility(View.INVISIBLE);
+//            }
         }
     }
 
@@ -256,8 +297,9 @@ public class MainActivity extends AppCompatActivity {
 
         uidedt = findViewById(R.id.uid_et);
         pwdedt = findViewById(R.id.pswd_et);
-        record_btn = findViewById(R.id.record);
+//        record_btn = findViewById(R.id.record);
         odds_btn = findViewById(R.id.odds);
+        records_btn = findViewById(R.id.records);
 
         uidedt.setText(ShareP.getUidFromPref(this));
         pwdedt.setText(ShareP.getPwdFromPref(this));
@@ -283,23 +325,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        record_btn.setOnClickListener(new View.OnClickListener() {
+        records_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                String pkg = "zj.zfenlly.tools";
-                String className = "zj.zfenlly.main.MainActivity";
-                ComponentName cn = new ComponentName(pkg, className);
-                intent.setComponent(cn);
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, RecordActivity.class);
                 startActivity(intent);
             }
         });
+//        record_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//                String pkg = "zj.zfenlly.tools";
+//                String className = "zj.zfenlly.main.MainActivity";
+//                ComponentName cn = new ComponentName(pkg, className);
+//                intent.setComponent(cn);
+//                startActivity(intent);
+//            }
+//        });
 
         uc_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String spec = "https://weibo.cn/u/1772392290";
+                String spec = "https://weibo.cn/u/" + second_uid;
                 OpenWebView.open(MainActivity.this, spec);
             }
         });
@@ -312,8 +362,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         LoadInjectLib.init(getPackageName());
+
+//gua by linurm
+        MPermissions.requestPermission(this);
     }
 
     /**
@@ -339,9 +391,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("ztag", "resume");
         tv.setText(stringFromJNI());
-        if (allowWriteExternal()) {
-            ;//new Thread(runnable).start();
+//        if (allowWriteExternal()) {
+//            ;//new Thread(runnable).start();
+////            Log.e("ztag","ask   ....");
+////        askForPermission();
+//        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_normal_1:
+                Intent intent = new Intent(this, RecordActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.option_normal_2:
+                return true;
+            case R.id.option_normal_3:
+                return true;
+            case R.id.option_normal_4:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
+
 }

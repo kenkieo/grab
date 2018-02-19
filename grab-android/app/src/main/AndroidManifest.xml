@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="cydia.permission.SUBSTRATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -36,6 +37,8 @@
             android:name=".Odds.OddsActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
 
+        <service android:name="zj.zfenlly.gua.FloatWinService" />
+        <activity android:name="zj.zfenlly.record.RecordActivity"/>
     </application>
 
 </manifest>

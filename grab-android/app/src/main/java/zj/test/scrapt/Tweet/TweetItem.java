@@ -23,7 +23,6 @@ public class TweetItem {
         this.fan = fan;
         this.integral = integral;
         this.uid = uid;
-
     }
 
     public String toString() {

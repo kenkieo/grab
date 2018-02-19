@@ -40,6 +40,11 @@ public class CookiesStore {
     public CookiesStore(Context context) {
         cookiePrefs = context.getSharedPreferences(COOKIE_PREFS, 0);
         cookies = new ConcurrentHashMap<String, Cookie>();
+
+
+    }
+
+    public void findInCookiesStore() {
         Cookie cookie;
         // Load any previously stored cookies into the store
         String storedCookieNames = cookiePrefs.getString(COOKIE_NAME_STORE, null);
@@ -76,7 +81,7 @@ public class CookiesStore {
         int index;
         String first, second;
         for (int i = 1; i < t.length; i++) {
-            Log.e("ZTAG", t[i] + " = ");
+//            Log.e("ZTAGs", t[i] + " = ");
 //        int i = 0;
             index = t[i].indexOf('=');
             if (index == -1) {
@@ -99,7 +104,7 @@ public class CookiesStore {
             }
         }
         Cookie cookie = null;
-//        if (domain == null) return null;
+        if (domain == null) return null;
         if (date == null) {
             if (httponly) {
                 cookie = new Cookie.Builder().name(name).value(value).domain(domain).httpOnly().build();
@@ -107,7 +112,7 @@ public class CookiesStore {
 //                if (domain == null)
 //                    cookie = new Cookie.Builder().name(name).value(value).domain("").build();
 //                else
-                    cookie = new Cookie.Builder().name(name).value(value).domain(domain).build();
+                cookie = new Cookie.Builder().name(name).value(value).domain(domain).build();
             }
         } else {
             if (httponly) {
@@ -123,8 +128,8 @@ public class CookiesStore {
 //        if (omitNonPersistentCookies && !cookie.persistent())
 //            return;
         String name = cookie.name() + cookie.domain();
-        Log.e("ZTAG", "name: " + name);
-        Log.e("ZTAG", "expiresAt: " + cookie.expiresAt() + " " + (new Date()).getTime());
+//        Log.e("ZTAG", "name: " + name);
+//        Log.e("ZTAG", "expiresAt: " + cookie.expiresAt() + " " + (new Date()).getTime());
         // Save cookie into local store, or remove if expired
         if (cookie.persistent()) {
             if (cookie.expiresAt() >= (new Date()).getTime()) {

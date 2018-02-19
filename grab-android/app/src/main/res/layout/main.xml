@@ -37,34 +37,81 @@
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/record"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Record"
-        android:visibility="invisible" />
 
-    <Button
-        android:id="@+id/genDoubleBall"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Double Ball" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/uc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Explorer" />
+        <Button
+            android:id="@+id/record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Record"
+            android:visibility="invisible" />
 
-    <Button
-        android:id="@+id/stock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Youguu" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/odds"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Odds" />
+            <Button
+                android:id="@+id/genDoubleBall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Double Ball" />
+
+            <Button
+                android:id="@+id/uc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Explorer" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/stock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Youguu" />
+
+            <Button
+                android:id="@+id/odds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Odds" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/records"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Menu" />
+
+            <Button
+                android:id="@+id/nulls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="No use" />
+        </LinearLayout>
+    </LinearLayout>
+
+
 </LinearLayout>
+

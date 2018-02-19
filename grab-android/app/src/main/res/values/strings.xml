@@ -8,6 +8,8 @@
     <string name="trade_freq">trade freq:</string>
     <string name="t_rank">total rank:</string>
     <string name="m_rise">month rise:</string>
+    <string name="ok">确定</string>
+    <string name="cancel">Cancel</string>
     <string name="w_profit">week profit:</string>
     <string name="m_rank">month rank:</string>
     <string name="t_profit">total profit:</string>
@@ -15,4 +17,8 @@
     <string name="w_rise">week rise:</string>
     <string name="m_profit">month profit:</string>
     <string name="w_rank">week rank:</string>
+    <string name="alert_dialog_two_buttons_title">
+        Lorem ipsum dolor sit aie consectetur adipiscing\nPlloaso mako nuto
+        siwuf cakso dodtos anr koop.
+    </string>
 </resources>

@@ -1,7 +1,6 @@
 package zj.test.scrapt.Tweet;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -16,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,8 +29,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import zj.test.scrapt.Time.NowDataTime;
-import zj.test.scrapt.Tweet.DataBase.DaoMaster;
-import zj.test.scrapt.Tweet.DataBase.DaoSession;
 import zj.test.scrapt.Tweet.DataBase.DataBaseImpl;
 import zj.test.scrapt.Tweet.DataBase.TweetNote;
 
@@ -56,14 +52,16 @@ public class GrabTweet {
             if (url.toString().equals("https://passport.weibo.cn/sso/login")) {
 //                cookieStore.put(url.scheme(), cookies);
                 for (Cookie cookie : cookies) {
-                    mCookiesStore.addCookie(cookie);
-//                    Log.e("ZTAGA", "B:" + cookie.toString());
-//                    cookie = mCookiesStore.parseCookie(cookie.toString());
-//                    Log.e("ZTAGA", "A:" + cookie.toString());
+                    Log.e("ZTAGA", "before:" + cookie.toString());
+                    cookie = mCookiesStore.parseCookie(cookie.toString());
+                    if (cookie != null) {
+                        Log.e("ZTAGA", "add :" + cookie.toString());
+                        mCookiesStore.addCookie(cookie);
+                    }
                 }
-                Log.e("ZTAG", "saveFromResponse:is" + url.toString());
+                Log.e("ZTAG", "saveFromResponse:is " + url.toString());
             }
-            Log.e("ZTAG", "saveFromResponse:" + url.toString());
+//            Log.e("ZTAG", "saveFromResponse: " + url.toString());
 //            for (int i = 0; i < cookies.size(); i++) {
 //                c = cookies.get(i);
 //                Log.e("ZTAG", "saveFromResponse:" + c.toString());
@@ -83,7 +81,7 @@ public class GrabTweet {
 
     public GrabTweet(Context context) {
         mContext = context;
-        mCookiesStore = new CookiesStore(context);
+
     }
 
     public static byte[] readInputStream(InputStream inStream) throws Exception {
@@ -113,21 +111,17 @@ public class GrabTweet {
     }
 
     private TweetNote getTweetFromDB(String uid) {
-        SQLiteDatabase db;
-        DaoMaster daoMaster;
-        DaoSession daoSession;
         if (uid == null) return null;
-        TweetNote tn = DataBaseImpl.getTweet(mContext, uid);
+        TweetNote tn = DataBaseImpl.getCurrTweet(mContext, uid);
 
         return tn;
     }
 
-    private void SetTweetFromDB(TweetNote tn, TweetNote tdb) {
+    private void SetTweetToDB(TweetNote tn, TweetNote tdb) {
         if (tdb != null) {
-            DataBaseImpl.delete(mContext, tdb);
+            ;//DataBaseImpl.delete(mContext, tdb);//not delete tweete from db
         }
         DataBaseImpl.insert(mContext, tn);
-
     }
 
 //    String printDiff(String t, String tdb) {
@@ -166,22 +160,20 @@ public class GrabTweet {
 //                        ((tdb == null) ? "-" : printDiff(t.getTweet(), tdb.getTweet())) + "  " +
 //                        ((tdb == null) ? "-" : printDiff(t.getIntegral(), tdb.getIntegral())) + "  Update !!!";
                 if ((tdb == null) || (!(t.getFollow().equals("0") || t.getFan().equals("0") || t.getTweet().equals("0") || t.getIntegral().equals("0")))) {
-                    SetTweetFromDB(t, tdb);
+                    SetTweetToDB(t, tdb);
                     Log.e("ZTAG", "set to DB");
                 }
-                if (!t.getIntegral().equals("0")) {
-//                    ((MainActivity) (mContext)).record_btn.setVisibility(View.VISIBLE);
-                    EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.RECORD_BTN, true));
-                }
+//                if (!t.getIntegral().equals("0")) {
+////                    ((MainActivity) (mContext)).record_btn.setVisibility(View.VISIBLE);
+//                    EventBus.getDefault().post(new MainEvent(s, MainEvent.EventType.RECORD_BTN, true));
+//                }
             }
 //            EventBus.getDefault().post(new MainEvent(s, 1, false));
 //            Log.e("ZTAG", "getUserInfo getUserInfo getUserInfo" + s);
         } catch (Exception e) {
             e.printStackTrace();
             s = e.getMessage();
-
         }
-
         s += "\n";
         return s;
     }
@@ -239,8 +231,6 @@ public class GrabTweet {
 
             if (response.isSuccessful()) {
                 String s = response.body().string();
-
-
                 final String result = s;
                 return result;
             } else {
@@ -304,15 +294,20 @@ public class GrabTweet {
         }
 //        ShareP.setUidToPref(MainActivity.this, uid);
 //        ShareP.setPwdToPref(MainActivity.this, pwd);
-        int cookieNum = mCookiesStore.getCookieNum();
 
+
+        mCookiesStore = new CookiesStore(mContext);
         if (hasFresh == false) {
+            mCookiesStore.findInCookiesStore();
+            int cookieNum = mCookiesStore.getCookieNum();
             Log.e("ZTAG", "have cookies: " + cookieNum);
             if (cookieNum == 4) {
                 return "has cookies " + cookieNum + "\n\n";
             }
+        } else {
+            Log.e("ZTAG", "clear cookies: ");
+            mCookiesStore.clear();
         }
-        mCookiesStore.clear();
         try {
 //            String data = "username=" + URLEncoder.encode(userName, "UTF-8")
 //                    + "&password=" + URLEncoder.encode(userPwd, "UTF-8")
@@ -355,11 +350,11 @@ public class GrabTweet {
             Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
             s = response.code() + "";
-            Log.e("ZTAG", "response success: " + response.message());
+            Log.e("ZTAG", "response success: " + response.toString() + " return code: " + s);
 //            s = "get cookies";
             ShareP.setUidToPref(mContext, userName);
             ShareP.setPwdToPref(mContext, userPwd);
-            Log.e("ZTAG", "response success: " + s);
+            Log.e("ZTAGe", "response success: " + s);
 
         } catch (Exception e) {
             e.printStackTrace();

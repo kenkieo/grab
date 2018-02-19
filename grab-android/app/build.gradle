@@ -5,7 +5,7 @@ android {
         android {
             keyAlias 'android'
             keyPassword '123456'
-            storeFile file('E:/F/apk/android.jks')
+            storeFile file('F:/apk/android.jks')
             storePassword '123456'
         }
     }
@@ -16,7 +16,7 @@ android {
     def code = offset.intValue()
     defaultConfig {
         applicationId "zj.test.scrapt"
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 27
         versionCode code
         versionName "1.0"
@@ -56,7 +56,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     compile 'org.jsoup:jsoup:1.11.1'
     compile 'org.greenrobot:eventbus:3.1.1'
@@ -65,4 +64,5 @@ dependencies {
     // add library
     implementation files('src/main/libs/yougu.jar')
     implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation project(':xUtilslibrary')
 }

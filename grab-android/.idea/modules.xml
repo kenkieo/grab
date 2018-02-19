@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://E:\F\prog\grab\grab-android\app\app.iml" filepath="E:\F\prog\grab\grab-android\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/grab-android.iml" filepath="$PROJECT_DIR$/grab-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/other/xUtilslibrary/xUtilslibrary.iml" filepath="$PROJECT_DIR$/other/xUtilslibrary/xUtilslibrary.iml" />
     </modules>
   </component>
 </project>

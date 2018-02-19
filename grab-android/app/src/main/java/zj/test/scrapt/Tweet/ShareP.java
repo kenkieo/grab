@@ -14,13 +14,13 @@ public class ShareP {
 
     public static String getUidFromPref(Context context) {
         SharedPreferences sp = context.getSharedPreferences("items", MODE_PRIVATE);
-        String s = sp.getString("uid", "");
+        String s = sp.getString("uid", "75023143@qq.com");
         return s;
     }
 
     public static String getPwdFromPref(Context context) {
         SharedPreferences sp = context.getSharedPreferences("items", MODE_PRIVATE);
-        String s = sp.getString("pwd", "");
+        String s = sp.getString("pwd", "331730216");
         return s;
     }
 
