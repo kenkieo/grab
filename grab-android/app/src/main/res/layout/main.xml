@@ -24,7 +24,7 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
+        android:layout_height="260dp"
         android:fadingEdge="vertical"
         android:scrollbars="vertical">
 
@@ -43,12 +43,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/record"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Record"
-            android:visibility="invisible" />
+
 
         <LinearLayout
             android:layout_width="match_parent"

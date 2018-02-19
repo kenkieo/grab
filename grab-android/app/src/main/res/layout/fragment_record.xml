@@ -38,7 +38,7 @@
         android:layout_alignStart="@+id/wbListView"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="385dp"
+        android:layout_marginTop="390dp"
         android:background="#856fd0"
         android:visibility="visible" />
 
