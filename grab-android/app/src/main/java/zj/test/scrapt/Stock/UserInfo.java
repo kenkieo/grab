@@ -303,7 +303,8 @@ public class UserInfo {
                 + R.string.avg_days + this.avgDays + " " + R.string.avg_profit + this.avgProfit + " " + R.string.trade_freq + this.tradingFrequency + "\n" +
                 R.string.t_rank + tRank + " " + R.string.t_rise + tRise + " " + R.string.t_profit + tp + "% \n" +
                 R.string.m_rank + mRank + " " + R.string.m_rise + mRise + " " + R.string.m_profit + mp + "% \n" +
-                R.string.w_rank + wRank + " " + R.string.w_rise + wRise + " " + R.string.w_profit + wp + "% \n";
+                R.string.w_rank + wRank + " " + R.string.w_rise + wRise + " " + R.string.w_profit + wp + "% \n"+
+                sucNum+" "+closeNum;
 
     }
 

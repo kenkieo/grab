@@ -1,10 +1,16 @@
 package zj.test.scrapt.Stock;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,46 +21,98 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import zj.test.scrapt.R;
+import zj.test.scrapt.Tweet.DataBase.DataBaseImpl;
+import zj.test.scrapt.Tweet.DataBase.TweetNote;
 
 import static zj.test.scrapt.Stock.StockEvent.EventType.COLOR_DIS;
+import static zj.test.scrapt.Tweet.UserID.third_uid;
 
 /**
  * Created by Administrator on 2017/11/13.
  */
 
-public class StockActivity extends Activity {
+public class Stock2Activity extends Activity {
 
     ListView lv = null;
     TextView tvs = null;
+    List<UserInfo> sa;
+    private final int CANSHU = 22;
+    public Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case CANSHU:
+                    mAttUserAdapter.setAliases(sa);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            GrabYougu g = GrabYougu.newInstance().setContext(StockActivity.this);
+            GrabYougu g = GrabYougu.newInstance().setContext(Stock2Activity.this);
             String s = "";
             EventBus.getDefault().post(new StockEvent(s, true));
             try {
                 g.getAttUsers();
-                List<UserInfo> sa = g.getListUser();
-                for (UserInfo a : sa) {
-                    s = g.getUserTrade(a.id + "");
-                    if (s.equals("")) {
-                        Log.e("ztag", " user not trade recently");
-                    } else {
-                        g.getAttUserInfo(a.id + "");
-                        g.getAttUserInfo2(a.id + "");
-                        g.getAttUserInfo3(a.id + "");
-                        EventBus.getDefault().post(new StockEvent("==============================================", false));
-                        EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
-                        EventBus.getDefault().post(new StockEvent("------------------------------------------------------------------------------------------", false));
-                        EventBus.getDefault().post(new StockEvent(s, false));
-                    }
-                }
+                sa = null;
+                sa = g.getListUser();
+                Message msg = new Message();
+                msg.what = CANSHU;
+                mHandler.sendMessage(msg);
             } catch (Exception e) {
                 e.printStackTrace();
                 s = e.getMessage();
                 EventBus.getDefault().post(new StockEvent(s, true));
             }
-            EventBus.getDefault().post(new StockEvent("================== END ======================", false));
+//            EventBus.getDefault().post(new StockEvent("================== END ======================", false));
+        }
+    };
+
+    private void clickUser(int n) {
+        setNum(n);
+        new Thread(userRunnable).start();
+    }
+
+    int n;
+
+    public void setNum(int n) {
+        this.n = n;
+    }
+
+    Runnable userRunnable = new Runnable() {
+        @Override
+        public void run() {
+            GrabYougu g = GrabYougu.newInstance().setContext(Stock2Activity.this);
+            String s = "";
+            EventBus.getDefault().post(new StockEvent(s, true));
+
+            UserInfo a = sa.get(n);
+            try {
+//            for (UserInfo a : sa) {
+                Log.e("----", a.id + " === ");
+                s = g.getUserTradeNoTime(a.id + "");
+                if (s.equals("")) {
+                    Log.e("ztag", " user not trade recently");
+                } else {
+                    g.getAttUserInfo(a.id + "");
+                    g.getAttUserInfo2(a.id + "");
+                    g.getAttUserInfo3(a.id + "");
+                    EventBus.getDefault().post(new StockEvent("==============================", false));
+                    EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
+                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------", false));
+                    EventBus.getDefault().post(new StockEvent(s, false));
+                }
+//            }
+            } catch (Exception e) {
+                e.printStackTrace();
+                s = e.getMessage();
+                EventBus.getDefault().post(new StockEvent(s, true));
+            }
+            EventBus.getDefault().post(new StockEvent("============= END ============", false));
+
         }
     };
 
@@ -114,12 +172,52 @@ public class StockActivity extends Activity {
         return a.toString();
     }
 
+    AttUsersAdapter mAttUserAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stock);
-        tvs = findViewById(R.id.tv_stock);
-        tvs.setMovementMethod(ScrollingMovementMethod.getInstance());
+        setContentView(R.layout.stock2);
+        lv = findViewById(R.id.stock2_lv);
+        tvs = findViewById(R.id.stock2_tv);
+//        tvs.setMovementMethod(ScrollingMovementMethod.getInstance());
+        mAttUserAdapter = new AttUsersAdapter(getApplicationContext(), R.layout.attusers);
+        lv.setAdapter(mAttUserAdapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                //DataBaseImpl.MSCDataBaseOp mMSCOp = new DataBaseImpl.MSCDataBaseOp();
+                final int key = (int) arg3;
+//                Log.e("----", key + "");
+                clickUser(key);
+//                List<TweetNote> ltn = DataBaseImpl.getListTweet(getApplicationContext(), third_uid);
+//                print(ltn.get(key).toString());
+//                final TweetNote tn = ltn.get(key);
+//                final AlertDialog dialog = new AlertDialog.Builder(mActivity)
+//                        .setTitle(third_uid)//在这里把写好的这个listview的布局加载dialog中
+//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+////                                print(":" + key);
+//                                DataBaseImpl.delete(getApplicationContext(), tn);
+//                                dialog.dismiss();
+//                                freshDBView();
+//                            }
+//                        })
+//                        .setMessage(tn.toString())
+//                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                // TODO Auto-generated method stub
+//                                dialog.cancel();
+//                            }
+//                        }).create();
+//                dialog.setCanceledOnTouchOutside(false);//使除了dialog以外的地方不能被点击
+//                dialog.show();
+            }
+        });
+        //tvs.setMovementMethod(ScrollingMovementMethod.getInstance());
         new Thread(runnable).start();
     }
 
@@ -139,6 +237,11 @@ public class StockActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
@@ -154,7 +257,6 @@ public class StockActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         tvs.setText("");
-//        runnable.interrupt();
-        Log.e("ZTAG", "StockActivity onDestroy");
+        Log.e("ZTAG", "Stock2Activity onDestroy");
     }
 }

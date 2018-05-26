@@ -15,4 +15,6 @@
     <string name="w_rise">周增涨:</string>
     <string name="m_profit">月收益:</string>
     <string name="w_rank">周排名:</string>
+    <string name="suc_num">成功数:</string>
+    <string name="close_num">交易数:</string>
 </resources>

@@ -96,14 +96,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Menu" />
+                android:text="Record" />
 
             <Button
-                android:id="@+id/nulls"
+                android:id="@+id/stock2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="No use" />
+                android:text="Youguu2" />
         </LinearLayout>
     </LinearLayout>
 

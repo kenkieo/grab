@@ -111,7 +111,7 @@ public class MPermissions {
 
         switch (requestCode) {
             case WRITE_EXTERNAL:
-//                askForPermission(mActivity);
+                askForPermission(mActivity);
 //                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:13468857714"));
 //                startActivity(intent);
 
@@ -124,14 +124,14 @@ public class MPermissions {
 
     public static void onResult(Activity mAcitivty, int requestCode) {
         if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
-            if (!Settings.canDrawOverlays(mAcitivty)) {
-                Log.e("ztag", "draw overlay permission not granted");
-//                    Toast.makeText(this, "权限授予失败，无法开启悬浮窗", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.e("ztag", "draw overlay permission granted");
-//                    Toast.makeText(this, "权限授予成功！", Toast.LENGTH_SHORT).show();
+            if (Settings.canDrawOverlays(mAcitivty)) {
+                Log.e("ztag", "permission granted start float win");
+                //                    Toast.makeText(this, "权限授予成功！", Toast.LENGTH_SHORT).show();
                 //启动FxService
                 mAcitivty.startService(floatWinIntent);
+            } else {
+                Log.e("ztag", "draw overlay permission not granted");
+//                    Toast.makeText(this, "权限授予失败，无法开启悬浮窗", Toast.LENGTH_SHORT).show();
             }
         }
     }

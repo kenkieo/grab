@@ -32,6 +32,7 @@ public class ClickThread extends Thread {
         times = t;//TimeSetting.getTimes(mContext);
         interval = inter;//TimeSetting.getInterval(mContext) * 100;
         mCoordinateView = coordinateView;
+        Log.e("ZTAG", "times:" + times + " interval:" + interval);
     }
 
     public ClickThread(Context context, int x, int y) {

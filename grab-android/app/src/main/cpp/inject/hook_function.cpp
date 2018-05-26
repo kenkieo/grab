@@ -177,5 +177,5 @@ struct Hook_lib *hook_entriesa[] = {
 
 struct Hook_libs hook_libs = {
         1,//2
-        hook_entriesa
+        hook_entries
 };

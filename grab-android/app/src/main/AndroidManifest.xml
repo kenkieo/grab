@@ -5,15 +5,16 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="cydia.permission.SUBSTRATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -32,12 +33,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Stock.Stock2Activity"></activity>
         <activity android:name=".Stock.StockActivity"></activity>
         <activity
             android:name=".Odds.OddsActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
 
-        <service android:name="zj.zfenlly.gua.FloatWinService" />
+
+        <activity
+            android:name="zj.zfenlly.gua.OverActivity"
+            android:screenOrientation="landscape"></activity>
+        <service android:name="zj.zfenlly.gua.FloatWinService"></service>
+        <receiver android:name="zj.zfenlly.wifi.WifiChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
         <activity android:name="zj.zfenlly.record.RecordActivity"/>
     </application>
 

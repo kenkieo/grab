@@ -4,8 +4,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,7 +20,6 @@ import android.widget.Toast;
 import zj.zfenlly.gua.RFile.Rfile;
 import zj.zfenlly.wifi.WifiAdmin;
 
-import static com.apportable.activity.VerdeActivity.stopClickVibrate;
 import static zj.zfenlly.gua.SystemInfo.CPU_TYPE;
 import static zj.zfenlly.gua.TimeSetting.getTimes;
 
@@ -33,6 +34,8 @@ public class FloatWinService extends Service {
     private static final String TAG = "FloatWinService";
     private static final int ButtonHeight = 66;
     static NotifySound ns = new NotifySound();
+    private static Vibrator vibrator = null;
+    public static int a;
     Context mContext;
     LinearLayout mFloatLayout;
     LinearLayout mFloatLayout2;
@@ -100,9 +103,6 @@ public class FloatWinService extends Service {
         return (int) (pxValue / scale + 0.5f);
     }
 
-    public static void playSound() {
-        ns.play(2);
-    }
 
     @Override
     public void onCreate() {
@@ -112,7 +112,32 @@ public class FloatWinService extends Service {
         mWifiAdmin = new WifiAdmin(this);
         ns.init(this);
         createView(this);
+        vibrateInit();
+        playSound();
 //        ct = new ClickThread();
+    }
+
+    public static void playSound() {
+        ns.play(2);
+    }
+
+    public static void NotifyVibrate() {
+        if (a == 0) {
+            a = 1;
+            doVibrate();
+        }
+    }
+
+    public static void doVibrate() {
+        long[] pattern = {100, 200, 100, 200, 100, 200};   // 停止 开启 停止 开启
+        if (vibrator != null)
+            vibrator.vibrate(pattern, -1);           //重复两次上面的pattern 如果只想震动一次，index设
+    }
+
+    public static void stopClickVibrate() {
+        long[] pattern = {100, 300};   // 停止 开启 停止 开启
+        if (vibrator != null)
+            vibrator.vibrate(pattern, -1);           //重复两次上面的pattern 如果只想震动一次，index设
     }
 
     @Override
@@ -215,7 +240,11 @@ public class FloatWinService extends Service {
         mWindowManager = (WindowManager) getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE);
         // 设置LayoutParams(全局变量）相关参数
         wmParams = new WindowManager.LayoutParams();
-        wmParams.type = WindowManager.LayoutParams.TYPE_PHONE; // 设置window type
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            wmParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            wmParams.type = WindowManager.LayoutParams.TYPE_PHONE; // 设置window type
+        }
         wmParams.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
         // 设置Window flag
         wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
@@ -610,19 +639,23 @@ public class FloatWinService extends Service {
 
     private WindowManager.LayoutParams mzParams() {
         WindowManager.LayoutParams wmParamsmz = new WindowManager.LayoutParams();
-        wmParamsmz.type = WindowManager.LayoutParams.TYPE_PHONE; // 设置window type
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            wmParamsmz.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            wmParamsmz.type = WindowManager.LayoutParams.TYPE_PHONE; // 设置window type
+        }
         wmParamsmz.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
         // 设置Window flag
         wmParamsmz.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         /*
          * 注意，flag的值可以为：
-		 * 下面的flags属性的效果形同“锁定”。
-		 * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
-		 * LayoutParams.FLAG_NOT_TOUCH_MODAL 不影响后面的事件
-		 * LayoutParams.FLAG_NOT_FOCUSABLE  不可聚焦
-		 * LayoutParams.FLAG_NOT_TOUCHABLE 不可触摸
-		 */
+         * 下面的flags属性的效果形同“锁定”。
+         * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
+         * LayoutParams.FLAG_NOT_TOUCH_MODAL 不影响后面的事件
+         * LayoutParams.FLAG_NOT_FOCUSABLE  不可聚焦
+         * LayoutParams.FLAG_NOT_TOUCHABLE 不可触摸
+         */
         // 调整悬浮窗口至左上角，便于调整坐标
         wmParamsmz.gravity = Gravity.LEFT | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值
@@ -638,19 +671,23 @@ public class FloatWinService extends Service {
     private void addCView() {
         add_flag = true;
         wmParams2 = new WindowManager.LayoutParams();
-        wmParams2.type = WindowManager.LayoutParams.TYPE_PHONE; // 设置window type
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            wmParams2.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            wmParams2.type = WindowManager.LayoutParams.TYPE_PHONE; // 设置window type
+        }
         wmParams2.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
         // 设置Window flag
         wmParams2.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         /*
          * 注意，flag的值可以为：
-		 * 下面的flags属性的效果形同“锁定”。
-		 * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
-		 * LayoutParams.FLAG_NOT_TOUCH_MODAL 不影响后面的事件
-		 * LayoutParams.FLAG_NOT_FOCUSABLE  不可聚焦
-		 * LayoutParams.FLAG_NOT_TOUCHABLE 不可触摸
-		 */
+         * 下面的flags属性的效果形同“锁定”。
+         * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
+         * LayoutParams.FLAG_NOT_TOUCH_MODAL 不影响后面的事件
+         * LayoutParams.FLAG_NOT_FOCUSABLE  不可聚焦
+         * LayoutParams.FLAG_NOT_TOUCHABLE 不可触摸
+         */
         // 调整悬浮窗口至左上角，便于调整坐标
         wmParams2.gravity = Gravity.LEFT | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值
@@ -686,7 +723,7 @@ public class FloatWinService extends Service {
         );
         addTimesView = new Button(this);
         click_times = getTimes(mContext);
-        addTimesView.setText("" + click_times);
+        addTimesView.setText("t:" + click_times);
         addTimesView.setHeight(dip2px(mContext, ButtonHeight));
         addTimesView.setWidth(dip2px(mContext, ButtonHeight));
         addTimesView.setLayoutParams(p);
@@ -729,7 +766,7 @@ public class FloatWinService extends Service {
 
         addIntervalView = new Button(this);
         click_interval = TimeSetting.getInterval(mContext);
-        addIntervalView.setText("" + click_interval);
+        addIntervalView.setText("i:" + click_interval);
         addIntervalView.setHeight(dip2px(mContext, ButtonHeight));
         addIntervalView.setWidth(dip2px(mContext, ButtonHeight));
         addIntervalView.setLayoutParams(p);
@@ -794,8 +831,13 @@ public class FloatWinService extends Service {
             settings_flag = false;
             delSettingsView();
         }
+        if (vibrator != null)
+            vibrator.cancel();
     }
 
+    public void vibrateInit() {
+        ;//vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    }
 //    class ClickThread extends Thread {
 //
 //        //        int x, y;

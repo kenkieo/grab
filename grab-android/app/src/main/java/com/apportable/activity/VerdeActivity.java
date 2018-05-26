@@ -17,32 +17,13 @@ import java.lang.reflect.Method;
 import zj.zfenlly.gua.NotifySound;
 
 public class VerdeActivity extends Activity {
-    public static int a;
-    static NotifySound ns = new NotifySound();
-    private static Vibrator vibrator;
+
+
 
     Context mContext = null;
 
-    public static void doVibrate() {
-        long[] pattern = {100, 200, 100, 200, 100, 200};   // 停止 开启 停止 开启
-        vibrator.vibrate(pattern, -1);           //重复两次上面的pattern 如果只想震动一次，index设
-    }
 
-    public static void stopClickVibrate() {
-        long[] pattern = {100, 300};   // 停止 开启 停止 开启
-        vibrator.vibrate(pattern, -1);           //重复两次上面的pattern 如果只想震动一次，index设
-    }
 
-    public static void playSound() {
-        ns.play(2);
-    }
-
-    public static void NotifyVibrate() {
-        if (a == 0) {
-            a = 1;
-            doVibrate();
-        }
-    }
 
     public static void zLog(String a) {
         Log.e("ZTAG", "" + a);
@@ -75,7 +56,7 @@ public class VerdeActivity extends Activity {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ns.init(this);
+//        ns.init(this);
 
 //        SeekBar sb = (SeekBar) findViewById(Rfile.light_seekbar);
 //        try {
@@ -102,9 +83,9 @@ public class VerdeActivity extends Activity {
 //
 //            }
 //        });
-        playSound();
+
         testreflect();
-        vibrateInit();
+
         //doVibrate();
         test();
 
@@ -339,7 +320,7 @@ public class VerdeActivity extends Activity {
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        vibrator.cancel();
+
     }
 
     private StringBuilder getFilePath() {
@@ -412,9 +393,7 @@ public class VerdeActivity extends Activity {
 
     }
 
-    public void vibrateInit() {
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-    }
+
 
     public void testreflect() {
         try {

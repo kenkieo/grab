@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
@@ -25,15 +26,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import zj.test.scrapt.Odds.OddsActivity;
 import zj.test.scrapt.R;
+import zj.test.scrapt.Stock.Stock2Activity;
 import zj.test.scrapt.Stock.StockActivity;
 import zj.test.scrapt.Wifi.WifiControl;
-import zj.zfenlly.gua.LoadInjectLib;
 import zj.zfenlly.gua.MPermissions;
 import zj.zfenlly.record.RecordActivity;
 
@@ -58,11 +60,13 @@ public class MainActivity extends Activity {
     Button uc_btn = null;
     Button stock_btn = null;
     Button ball_btn = null;
-//    Button record_btn = null;
+    //    Button record_btn = null;
     Button odds_btn = null;
     Button records_btn = null;
+    Button stock2_btn = null;
     String uid;
     String pwd;
+    Context mContext;
     Runnable ballRunnable = new Runnable() {
         @Override
         public void run() {
@@ -71,6 +75,48 @@ public class MainActivity extends Activity {
             EventBus.getDefault().post(new MainEvent("" + random(6, 1, 34), false));
         }
     };
+
+    public void set_led(int a) {
+        try {
+            Process process = null;
+            DataOutputStream dos = null;
+            process = Runtime.getRuntime().exec("sh");
+            dos = new DataOutputStream(process.getOutputStream());
+            if (a == 0) {
+                dos.writeBytes("echo 0 > /sys/devices/leds.28/leds/camera-led/brightness\n");
+            } else {
+                dos.writeBytes("echo 1 > /sys/devices/leds.28/leds/camera-led/brightness\n");
+            }
+            Log.e("TAG", "1:" + a);
+            dos.flush();
+//            process.waitFor();
+            dos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.e("TAG", "2:" + a);
+    }
+
+    static int led_on_off = 0;
+    Runnable runnableled = new Runnable() {
+        @Override
+        public void run() {
+            if (led_on_off == 1) {
+                led_on_off = 0;
+            } else {
+                led_on_off = 1;
+                reboot();
+            }
+            set_led(led_on_off);
+        }
+    };
+
+    public void reboot() {
+        mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        mPowerManager.reboot("reboot");
+    }
+
+    private PowerManager mPowerManager;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -289,7 +335,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         tv = findViewById(R.id.sample_text);
-
+        mContext = this;
         login_btn = findViewById(R.id.login);
         uc_btn = findViewById(R.id.uc);
         stock_btn = findViewById(R.id.stock);
@@ -300,6 +346,17 @@ public class MainActivity extends Activity {
 //        record_btn = findViewById(R.id.record);
         odds_btn = findViewById(R.id.odds);
         records_btn = findViewById(R.id.records);
+        stock2_btn = findViewById(R.id.stock2);
+        stock2_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, Stock2Activity.class);
+                startActivity(intent);
+//                new Thread(runnableled).start();
+            }
+        });
+
 
         uidedt.setText(ShareP.getUidFromPref(this));
         pwdedt.setText(ShareP.getPwdFromPref(this));
@@ -362,10 +419,11 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
-        LoadInjectLib.init(getPackageName());
-
+        // gua by linurm
+        //LoadInjectLib.init(getPackageName());
+        tv.setText(stringFromJNI());
 //gua by linurm
-        MPermissions.requestPermission(this);
+        //MPermissions.requestPermission(this);
     }
 
     /**
@@ -392,7 +450,7 @@ public class MainActivity extends Activity {
     public void onResume() {
         super.onResume();
         Log.e("ztag", "resume");
-        tv.setText(stringFromJNI());
+
 //        if (allowWriteExternal()) {
 //            ;//new Thread(runnable).start();
 ////            Log.e("ztag","ask   ....");

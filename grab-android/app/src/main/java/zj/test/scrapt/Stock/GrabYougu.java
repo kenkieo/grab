@@ -26,9 +26,23 @@ public class GrabYougu {
     public Context mContext;
     HashMap<String, UserInfo> mp;
 
-    public GrabYougu(Context context) {
-        mContext = context;
+    private static GrabYougu instance = null;
+
+
+    public static GrabYougu newInstance() {
+        if (null == instance) {
+            instance = new GrabYougu();
+        }
+        return instance;
+    }
+
+    public GrabYougu() {
         mp = new HashMap<String, UserInfo>();
+    }
+
+    public GrabYougu setContext(Context context) {
+        mContext = context;
+        return this;
     }
 
 
@@ -102,8 +116,8 @@ public class GrabYougu {
         try {
             a += "uid=" + g.a("1628501".getBytes("UTF-8"));
             a += "&fromId=" + g.a("0".getBytes("UTF-8"));
-            a += "&reqNum=" + g.a("20".getBytes("UTF-8"));
-            Log.w("ZTAG", "" + a);
+            a += "&reqNum=" + g.a("100".getBytes("UTF-8"));
+            Log.w("ZTAG", "getAttUsers:" + a);
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -140,8 +154,6 @@ public class GrabYougu {
 //                mUserInfo.setProfitRate(profitRate);
 //                mp.put(id + "", mUserInfo);
 //            }
-
-
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -159,7 +171,7 @@ public class GrabYougu {
 
             a += "userid=" + g.a(uid.getBytes("UTF-8"));
             a += "&matchid=" + g.a("1".getBytes("UTF-8"));
-            Log.w("ZTAG", "" + a);
+            Log.w("ZTAG", "getAttUserInfo:" + a);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,8 +190,8 @@ public class GrabYougu {
                 return s;
             }
 
-
             UserInfo mUserInfo = mp.get(uid);
+            Log.e("ZTAG", jsonObject.getString("nick") + " rrr");
             mUserInfo.setNickname(jsonObject.getString("nick"))
                     .setAccuracy((int) jsonObject.get("accuracy"))
                     .setProfitability(jsonObject.getString("profitability"))
@@ -206,7 +218,7 @@ public class GrabYougu {
         try {
             a += "userid=" + g.a(uid.getBytes("UTF-8"));
             a += "&matchid=" + g.a("1".getBytes("UTF-8"));
-            Log.w("ZTAG", "" + a);
+            Log.w("ZTAG", "getAttUserInfo2:" + a);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -255,7 +267,7 @@ public class GrabYougu {
             a += g.a("201712011138191628501".getBytes("UTF-8")) + "/";
             a += g.a(uid.getBytes("UTF-8")) + "/";
             a += g.a("1".getBytes("UTF-8"));
-            Log.w("ZTAG", "" + a);
+            Log.w("ZTAG", "getAttUserInfo3:" + a);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -303,7 +315,7 @@ public class GrabYougu {
             a += "&reqnum=" + g.a("20".getBytes("UTF-8"));
             a += "&uid=" + g.a(uid.getBytes("UTF-8"));
             a += "&version=1";
-            Log.w("ZTAG", "" + a);
+            Log.w("ZTAG", "getUserTrade:" + a);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -322,8 +334,56 @@ public class GrabYougu {
                 long l = jsonObject.getLong("ctime");
                 l = nowtime - l;
                 if (l >= TIME_EXPRERS)
-                    continue;
+                    break;
                 s = jsonObject.getString("shareText") + "\n";
+                ss.append("\n").append(s);
+                r = jsonObject.getString("content");
+                r = cutString(r, "<", ">");
+                String[] temp = r.split(" ");
+                r = temp[3];
+                ss.append(r).append("\n");
+                s = s + r;
+            }
+            s = ss.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            s = e.getMessage();
+        }
+
+        return s;
+    }
+
+    public String getUserTradeNoTime(String uid) {
+        String a = "";
+        String s = "";
+        a = "http://mncg.youguu.com/youguu/trade/conclude/query?";
+        try {
+            a += "matchid=" + g.a("1".getBytes("UTF-8"));
+            a += "&fromtid=" + g.a("0".getBytes("UTF-8"));
+            a += "&reqnum=" + g.a("100".getBytes("UTF-8"));
+            a += "&uid=" + g.a(uid.getBytes("UTF-8"));
+            a += "&version=1";
+            Log.w("ZTAG", "getUserTrade:" + a);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String spec = a;
+        try {
+            String resp = getUrlResponse(spec);
+            String result = getJsonArray(resp, "result");
+            if (result == null) return s;
+            JSONArray jsonArray = new JSONArray(result);
+            String r;
+            StringBuffer ss = new StringBuffer();
+            long nowtime = System.currentTimeMillis();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                s = jsonArray.get(i).toString();
+                JSONObject jsonObject = new JSONObject(s);
+                long l = jsonObject.getLong("ctime");
+                l = nowtime - l;
+                s = jsonObject.getString("shareText") + "\n";
+//                s = jsonObject.getString("content") + "\n";
                 ss.append("\n").append(s);
                 r = jsonObject.getString("content");
                 r = cutString(r, "<", ">");
