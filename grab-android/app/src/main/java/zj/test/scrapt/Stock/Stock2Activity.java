@@ -100,10 +100,10 @@ public class Stock2Activity extends Activity {
                     g.getAttUserInfo(a.id + "");
                     g.getAttUserInfo2(a.id + "");
                     g.getAttUserInfo3(a.id + "");
-                    EventBus.getDefault().post(new StockEvent("==============================", false));
+                    EventBus.getDefault().post(new StockEvent("=======================", false));
                     EventBus.getDefault().post(new StockEvent(UserInfoToString(a), COLOR_DIS, false));
-                    EventBus.getDefault().post(new StockEvent("---------------------------------------------------------", false));
-                    EventBus.getDefault().post(new StockEvent(s, false));
+                    EventBus.getDefault().post(new StockEvent("-------------------------------------------", false));
+                    EventBus.getDefault().post(new StockEvent(s, COLOR_DIS,false));
                 }
 //            }
             } catch (Exception e) {

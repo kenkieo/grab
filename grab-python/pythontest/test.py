@@ -9,9 +9,9 @@ import json
 import datetime
 import yougu
 import time
+
 WEBDRIVER_USED = False
 Debuggable = False
-
 
 if WEBDRIVER_USED == True:
     from selenium import webdriver
@@ -45,6 +45,7 @@ class transCookie:
             itemDict[key] = value
         return itemDict
 
+
 class OpFile:
     def __init__(self, name):
         # print 'OpFile'
@@ -60,15 +61,48 @@ class OpFile:
     def close(self):
         self.fd.close()
 
+
 def checkDir(dir):
     a = os.path.exists(dir)
     if a == False:
         os.makedirs(dir)
 
 
+import ConfigParser
+
+
+# sftp.mkdir('abc')
+class cfgFile():
+    def __init__(self, file):
+        self.file = file
+        self.config = ConfigParser.RawConfigParser()
+        self.config.read(self.file)
+
+    def getSectionOptionValue(self, section, option, def_value):
+        try:
+            return self.config.get(section, option)
+        except ConfigParser.NoSectionError:
+            self.config.add_section(section)
+            self.config.set(section, option, def_value)
+        except ConfigParser.NoOptionError:
+            self.config.set(section, option, def_value)
+        with open(self.file, 'wb') as configfile:
+            self.config.write(configfile)
+        return def_value
+
+    def setSectionOptionValue(self, section, option, value):
+        try:
+            self.config.set(section, option, value)
+        except ConfigParser.NoSectionError:
+            self.config.add_section(section)
+            self.config.set(section, option, value)
+        except ConfigParser.NoOptionError:
+            self.config.set(section, option, value)
+        with open(self.file, 'wb') as configfile:
+            self.config.write(configfile)
+
+
 class Weibo:
-    username = "75023143@qq.com"  # raw_input('input sina weibo id: ')
-    password = "331730216"  # raw_input('input secret: ')
     cookies = ''
     allDir = 'html'
     tweetDir = allDir
@@ -81,6 +115,18 @@ class Weibo:
     def login(self):
         s = requests.Session()
 
+        cfg = cfgFile("weibo.cfg")
+
+        self.username = cfg.getSectionOptionValue("weibo", "username", "")
+        self.password = cfg.getSectionOptionValue("weibo", "password", "")
+
+        if self.username == "":
+            self.username = raw_input('input sina weibo id: ')
+            self.password = raw_input('input password: ')
+        elif self.password == "":
+            password = raw_input('input password: ')
+        cfg.setSectionOptionValue("weibo", "username", self.username)
+        cfg.setSectionOptionValue("weibo", "password", self.password)
         # r = s.get('https://passport.weibo.cn/signin/login')
         # r = s.get('https://passport.weibo.cn/sso/login')
         # r = s.get("http://httpbin.org/cookies")
@@ -193,7 +239,7 @@ class Weibo:
                            }
                 r2 = requests.get(r.url, headers=headers)
 
-                print r2,'============'
+                print r2, '============'
                 if WEBDRIVER_USED == True:
                     iedriver = 'C:\Users\linurm\Downloads\IEDriverServer_x64_3.9.0\IEDriverServer.exe'
                     try:
@@ -258,7 +304,7 @@ class Weibo:
                 if r == -1:
                     print url + '   error !!!'
                     return
-            except :
+            except:
                 return
 
     def getUidAtUserHtml(self, uid):

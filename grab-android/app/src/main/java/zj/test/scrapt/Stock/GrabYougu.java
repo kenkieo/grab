@@ -357,6 +357,14 @@ public class GrabYougu {
     public String getUserTradeNoTime(String uid) {
         String a = "";
         String s = "";
+        String RED_COLOR = "<font color=\'#ff0000\'>";
+        String BLUE_COLOR = "<font color=\'#0000ff\'>";
+        String GREEN_COLOR = "<font color=\'#00ff00\'>";
+        String VIOLET_COLOR = "<font color=\'#9966cc\'>";
+        String CORAL3_COLOR = "<font color=\'#cd5b45\'>";
+        String COLOR_START = RED_COLOR;
+        String COLOR_END = "</font>";
+
         a = "http://mncg.youguu.com/youguu/trade/conclude/query?";
         try {
             a += "matchid=" + g.a("1".getBytes("UTF-8"));
@@ -384,12 +392,21 @@ public class GrabYougu {
                 l = nowtime - l;
                 s = jsonObject.getString("shareText") + "\n";
 //                s = jsonObject.getString("content") + "\n";
-                ss.append("\n").append(s);
+                //s = s.split("以")[0] + "\n" + s.split("以")[1];
+                if (s.contains("买入")) {
+                    COLOR_START = RED_COLOR;
+                    s = s.split("买入")[0] + "<br>" + COLOR_START + "买入 " + s.split("买入")[1] + COLOR_END + "<br>";
+                }
+                if (s.contains("卖出")) {
+                    COLOR_START = BLUE_COLOR;
+                    s = s.split("卖出")[0] + "<br>" + COLOR_START + "卖出 " + s.split("卖出")[1] + COLOR_END + "<br>";
+                }
+                ss.append("<br>").append(s);
                 r = jsonObject.getString("content");
                 r = cutString(r, "<", ">");
                 String[] temp = r.split(" ");
                 r = temp[3];
-                ss.append(r).append("\n");
+                ss.append(r).append("<br>");
                 s = s + r;
             }
             s = ss.toString();
